@@ -36,12 +36,17 @@ public class CategoriaControlador extends Utilitarios {
     }
 
     public void guardarCategoria() {
-        Boolean categoriaExiste = categoriaServicio.guardarCategoria(categoria);
-        if (categoriaExiste) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
-        }
-        else{
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido almacenado."));
+
+        if (categoriaServicio.buscarCategoriaPorNombre(categoria.getNombr()) == null) {
+            Boolean categoriaExiste = categoriaServicio.guardarCategoria(categoria);
+            if (categoriaExiste) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido almacenado."));
+            }
+            inicio();
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La categoría ingresada ya existe."));
         }
 
     }
