@@ -49,7 +49,7 @@ public class Utilitarios implements Serializable {
 
 
 
-    private ResourceBundle resource = ResourceBundle.getBundle("sptuv.gob.ec.refcon.mensaje.messages_es_EC");
+   
     protected static String REGISTRO_GUARDADO = "message.guardar";
     protected static String REGISTRO_ACTUALIZADO = "message.actualizar";
     protected static String REGISTRO_ELIMINADO = "message.eliminar";
@@ -296,38 +296,7 @@ public class Utilitarios implements Serializable {
         }
     }
 
-    /**
-     * Mensaje de información
-     *
-     * @param key String titulo
-     * @param mensajeAdicional String Mensaje
-     */
-    protected void ponerMensajeInfo(String key, String mensajeAdicional) {
-        getContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, this.resource.getString(key).concat(" ").concat(mensajeAdicional != null ? mensajeAdicional : ""), resource.getString(key).concat(" ").concat(
-                (mensajeAdicional == null) ? "" : (mensajeAdicional == null) ? "" : mensajeAdicional)));//new FacesMessage(FacesMessage.SEVERITY_INFO,resource.getString(key).concat(" ").concat(mensajeAdicional)  ));
-    }
-
-    /**
-     * Mensaje de Error
-     *
-     * @param key String titulo
-     * @param mensajeAdicional String Mensaje
-     */
-    protected void ponerMensajeError(String key, String mensajeAdicional) {
-        getContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, resource.getString(key).concat(" ").concat(mensajeAdicional != null ? mensajeAdicional : ""), resource.getString(key).concat(" ").concat(
-                mensajeAdicional == null ? "" : mensajeAdicional)));//new FacesMessage(FacesMessage.SEVERITY_INFO,resource.getString(key).concat(" ").concat(mensajeAdicional)  ));
-    }
-
-    /**
-     * Mensaje de Alerta
-     *
-     * @param key String Titulo
-     * @param mensajeAdicional Mensaje que se desea colocar
-     */
-    protected void ponerMensajeAlerta(String key, String mensajeAdicional) {
-        getContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, resource.getString(key).concat(" ").concat(mensajeAdicional != null ? mensajeAdicional : ""), resource.getString(key).concat(" ").concat(
-                mensajeAdicional == null ? "" : mensajeAdicional)));//new FacesMessage(FacesMessage.SEVERITY_INFO,resource.getString(key).concat(" ").concat(mensajeAdicional)  ));
-    }
+  
 
     /**
      * Mensaje para componente

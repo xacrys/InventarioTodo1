@@ -11,20 +11,27 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <h:form>
-                    <p:panel header="Registro de Categoría" >
+                    <p:panel header="Registro de Productos" >
                         <p:panelGrid columns="2" layout="grid">            
-                            <p:outputLabel value="Nombre"><span class="rojo"> *</span></p:outputLabel>
-                            
+
+                            <p:outputLabel value="Categoría:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:125px">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+                                <f:selectItem itemLabel="PS4" itemValue="PS4" />
+                                <f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Nombre:"><span class="rojo"> *</span></p:outputLabel>
                             <p:inputText ></p:inputText>
-
-                            <p:outputLabel value="Descripción"></p:outputLabel>
                             
-                            <p:inputText ></p:inputText>
 
+                            <p:outputLabel value="Precio de Compra:"><span class="rojo"> *</span></p:outputLabel>                            
+                            <p:inputNumber id="input1" value="#{inputNumberView.input1}"></p:inputNumber>  
 
-                            <p:outputLabel value="Estado"><span class="rojo"> *</span></p:outputLabel>
-                            
-                            <p:selectBooleanButton id="value1" value="#{selectBooleanView.value1}" onLabel="Activo" offLabel="Inactivo" style="width:100px" />
+                            <p:outputLabel value="Precio de Venta:"><span class="rojo"> *</span></p:outputLabel>                            
+                           <p:inputNumber id="input2" value="#{inputNumberView.input1}"></p:inputNumber> 
+
 
                         </p:panelGrid>
                         <center>

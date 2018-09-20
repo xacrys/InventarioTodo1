@@ -10,27 +10,32 @@
     <ui:define name="contenido" >
         <div class="ui-g">
             <div class="ui-g-12">
-                <h:form>
-                    <p:panel header="Registro de Productos" >
-                        <p:panelGrid columns="2" layout="grid">            
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <h:form id="frmCategoria">
+                    <p:panel header="Registro de Categoría" >
+                        <p:panelGrid id="pgCategoria" columns="2" layout="grid">            
                             <p:outputLabel value="Nombre"><span class="rojo"> *</span></p:outputLabel>
-                            
-                            <p:inputText ></p:inputText>
+
+                            <p:inputText value="#{categoriaControlador.categoria.nombr}"></p:inputText>
 
                             <p:outputLabel value="Descripción"></p:outputLabel>
-                            
-                            <p:inputText ></p:inputText>
+
+                            <p:inputText value="#{categoriaControlador.categoria.descripcionCategoria}"></p:inputText>
 
 
                             <p:outputLabel value="Estado"><span class="rojo"> *</span></p:outputLabel>
-                            
-                            <p:selectBooleanButton id="value1" value="#{selectBooleanView.value1}" onLabel="Activo" offLabel="Inactivo" style="width:100px" />
+
+                            <p:selectBooleanButton  value="#{categoriaControlador.categoria.estadpCategoria}" onLabel="Activo" offLabel="Inactivo" style="width:100px" />
+
 
                         </p:panelGrid>
                         <center>
-                            <p:commandButton value="Guardar" icon="ui-icon-disk"></p:commandButton>
-                            <p:commandButton value="Limpiar" icon="ui-icon-refresh"></p:commandButton>
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{categoriaControlador.guardarCategoria}" process="frmCategoria" update="pgCategoria"></p:commandButton>
+                            <p:commandButton value="Limpiar" icon="ui-icon-refresh" actionListener="#{categoriaControlador.limpiarCategoria()}" process="frmCategoria" update="pgCategoria"></p:commandButton>
                         </center>
+
                     </p:panel>
                 </h:form>
             </div>           
