@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="contenido" >
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h:form>
+                    <p:panel header="Registro de Categoría" >
+                        <p:panelGrid columns="2" layout="grid">            
+                            <p:outputLabel value="Nombre"><span class="rojo"> *</span></p:outputLabel>
+                            
+                            <p:inputText ></p:inputText>
+
+                            <p:outputLabel value="Descripción"></p:outputLabel>
+                            
+                            <p:inputText ></p:inputText>
+
+
+                            <p:outputLabel value="Estado"><span class="rojo"> *</span></p:outputLabel>
+                            
+                            <p:selectBooleanButton id="value1" value="#{selectBooleanView.value1}" onLabel="Activo" offLabel="Inactivo" style="width:100px" />
+
+                        </p:panelGrid>
+                        <center>
+                            <p:commandButton value="Guardar" icon="ui-icon-disk"></p:commandButton>
+                            <p:commandButton value="Limpiar" icon="ui-icon-refresh"></p:commandButton>
+                        </center>
+                    </p:panel>
+                </h:form>
+            </div>           
+        </div>
+    </ui:define>    
+</ui:composition>
