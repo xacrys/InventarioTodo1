@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Cristian
  */
 @Entity
-@Table(name = "producto", schema="todo1")
+@Table(name = "producto", schema = "todo1")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p")
@@ -38,8 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Producto.findByNombreProducto", query = "SELECT p FROM Producto p WHERE p.nombreProducto = :nombreProducto")
     , @NamedQuery(name = "Producto.findByPreciouProducto", query = "SELECT p FROM Producto p WHERE p.preciouProducto = :preciouProducto")
     , @NamedQuery(name = "Producto.findByPreciocProducto", query = "SELECT p FROM Producto p WHERE p.preciocProducto = :preciocProducto")
-    , @NamedQuery(name = "Producto.findByEstadoProducti", query = "SELECT p FROM Producto p WHERE p.estadoProducti = :estadoProducti")
-    , @NamedQuery(name = "Producto.findByStock", query = "SELECT p FROM Producto p WHERE p.stock = :stock")})
+    , @NamedQuery(name = "Producto.findByStock", query = "SELECT p FROM Producto p WHERE p.stock = :stock")
+    , @NamedQuery(name = "Producto.findByEstadoProducto", query = "SELECT p FROM Producto p WHERE p.estadoProducto = :estadoProducto")})
 public class Producto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,10 +56,10 @@ public class Producto implements Serializable {
     private BigDecimal preciouProducto;
     @Column(name = "precioc_producto")
     private BigDecimal preciocProducto;
-    @Column(name = "estado_producti")
-    private Short estadoProducti;
     @Column(name = "stock")
     private Integer stock;
+    @Column(name = "estado_producto")
+    private Boolean estadoProducto;
     @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
     private List<Movimiento> movimientoList;
     @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
@@ -107,20 +107,20 @@ public class Producto implements Serializable {
         this.preciocProducto = preciocProducto;
     }
 
-    public Short getEstadoProducti() {
-        return estadoProducti;
-    }
-
-    public void setEstadoProducti(Short estadoProducti) {
-        this.estadoProducti = estadoProducti;
-    }
-
     public Integer getStock() {
         return stock;
     }
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public Boolean getEstadoProducto() {
+        return estadoProducto;
+    }
+
+    public void setEstadoProducto(Boolean estadoProducto) {
+        this.estadoProducto = estadoProducto;
     }
 
     @XmlTransient

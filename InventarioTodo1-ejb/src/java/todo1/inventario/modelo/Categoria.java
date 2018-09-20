@@ -27,14 +27,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Cristian
  */
 @Entity
-@Table(name = "categoria", schema="todo1")
+@Table(name = "categoria", schema = "todo1")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c")
     , @NamedQuery(name = "Categoria.findByIdCategoria", query = "SELECT c FROM Categoria c WHERE c.idCategoria = :idCategoria")
     , @NamedQuery(name = "Categoria.findByNombr", query = "SELECT c FROM Categoria c WHERE c.nombr = :nombr")
     , @NamedQuery(name = "Categoria.findByDescripcionCategoria", query = "SELECT c FROM Categoria c WHERE c.descripcionCategoria = :descripcionCategoria")
-    , @NamedQuery(name = "Categoria.findByEstadoCategoria", query = "SELECT c FROM Categoria c WHERE c.estadoCategoria = :estadoCategoria")})
+    , @NamedQuery(name = "Categoria.findByEstadpCategoria", query = "SELECT c FROM Categoria c WHERE c.estadpCategoria = :estadpCategoria")})
 public class Categoria implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,8 +49,8 @@ public class Categoria implements Serializable {
     @Size(max = 100)
     @Column(name = "descripcion_categoria")
     private String descripcionCategoria;
-    @Column(name = "estado_categoria")
-    private Short estadoCategoria;
+    @Column(name = "estadp_categoria")
+    private Boolean estadpCategoria;
     @OneToMany(mappedBy = "idCategoria", fetch = FetchType.LAZY)
     private List<Producto> productoList;
 
@@ -85,12 +85,12 @@ public class Categoria implements Serializable {
         this.descripcionCategoria = descripcionCategoria;
     }
 
-    public Short getEstadoCategoria() {
-        return estadoCategoria;
+    public Boolean getEstadpCategoria() {
+        return estadpCategoria;
     }
 
-    public void setEstadoCategoria(Short estadoCategoria) {
-        this.estadoCategoria = estadoCategoria;
+    public void setEstadpCategoria(Boolean estadpCategoria) {
+        this.estadpCategoria = estadpCategoria;
     }
 
     @XmlTransient

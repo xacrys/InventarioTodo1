@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Cristian
  */
 @Entity
-@Table(name = "vendedor", schema="todo1")
+@Table(name = "vendedor", schema = "todo1")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Vendedor.findAll", query = "SELECT v FROM Vendedor v")
@@ -58,7 +58,7 @@ public class Vendedor implements Serializable {
     @Column(name = "celular_vendedor")
     private String celularVendedor;
     @Column(name = "estado_vendedor")
-    private Short estadoVendedor;
+    private Boolean estadoVendedor;
     @OneToMany(mappedBy = "idVendedor", fetch = FetchType.LAZY)
     private List<Transaccion> transaccionList;
 
@@ -109,11 +109,11 @@ public class Vendedor implements Serializable {
         this.celularVendedor = celularVendedor;
     }
 
-    public Short getEstadoVendedor() {
+    public Boolean getEstadoVendedor() {
         return estadoVendedor;
     }
 
-    public void setEstadoVendedor(Short estadoVendedor) {
+    public void setEstadoVendedor(Boolean estadoVendedor) {
         this.estadoVendedor = estadoVendedor;
     }
 

@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Cristian
  */
 @Entity
-@Table(name = "usuario", schema="todo1")
+@Table(name = "usuario", schema = "todo1")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByDireccionRsUsuario", query = "SELECT u FROM Usuario u WHERE u.direccionRsUsuario = :direccionRsUsuario")
     , @NamedQuery(name = "Usuario.findByFonoRsUsuario", query = "SELECT u FROM Usuario u WHERE u.fonoRsUsuario = :fonoRsUsuario")
     , @NamedQuery(name = "Usuario.findByMailRsUsuario", query = "SELECT u FROM Usuario u WHERE u.mailRsUsuario = :mailRsUsuario")
-    , @NamedQuery(name = "Usuario.findByEstadoRsUsuario", query = "SELECT u FROM Usuario u WHERE u.estadoRsUsuario = :estadoRsUsuario")})
+    , @NamedQuery(name = "Usuario.findByEstadoUsuario", query = "SELECT u FROM Usuario u WHERE u.estadoUsuario = :estadoUsuario")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -80,8 +80,8 @@ public class Usuario implements Serializable {
     @Size(max = 100)
     @Column(name = "mail_rs_usuario")
     private String mailRsUsuario;
-    @Column(name = "estado_rs_usuario")
-    private Short estadoRsUsuario;
+    @Column(name = "estado_usuario")
+    private Boolean estadoUsuario;
     @OneToMany(mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private List<UsuarioTipoUsuario> usuarioTipoUsuarioList;
     @OneToMany(mappedBy = "idUsuario", fetch = FetchType.LAZY)
@@ -182,12 +182,12 @@ public class Usuario implements Serializable {
         this.mailRsUsuario = mailRsUsuario;
     }
 
-    public Short getEstadoRsUsuario() {
-        return estadoRsUsuario;
+    public Boolean getEstadoUsuario() {
+        return estadoUsuario;
     }
 
-    public void setEstadoRsUsuario(Short estadoRsUsuario) {
-        this.estadoRsUsuario = estadoRsUsuario;
+    public void setEstadoUsuario(Boolean estadoUsuario) {
+        this.estadoUsuario = estadoUsuario;
     }
 
     @XmlTransient

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Cristian
  */
 @Entity
-@Table(name = "operacion", schema="todo1")
+@Table(name = "operacion", schema = "todo1")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Operacion.findAll", query = "SELECT o FROM Operacion o")
@@ -45,7 +45,7 @@ public class Operacion implements Serializable {
     @Column(name = "descripcion_operacion")
     private String descripcionOperacion;
     @Column(name = "estado_operacion")
-    private Short estadoOperacion;
+    private Boolean estadoOperacion;
     @JoinColumn(name = "id_transaccion", referencedColumnName = "id_transaccion")
     @ManyToOne(fetch = FetchType.LAZY)
     private Transaccion idTransaccion;
@@ -73,11 +73,11 @@ public class Operacion implements Serializable {
         this.descripcionOperacion = descripcionOperacion;
     }
 
-    public Short getEstadoOperacion() {
+    public Boolean getEstadoOperacion() {
         return estadoOperacion;
     }
 
-    public void setEstadoOperacion(Short estadoOperacion) {
+    public void setEstadoOperacion(Boolean estadoOperacion) {
         this.estadoOperacion = estadoOperacion;
     }
 

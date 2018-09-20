@@ -31,6 +31,10 @@ public abstract class Generico<T> {
     public void edit(T entity) {
         getEntityManager().merge(entity);
     }
+    
+     public T editEntity(T entity) {
+        return getEntityManager().merge(entity);
+    }
 
     public void remove(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));
