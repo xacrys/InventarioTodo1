@@ -40,5 +40,26 @@ public class CategoriaDao extends Generico<Categoria> {
             return null;
         }
     }
+    
+     public List<Categoria> obtenerCategoriasActivasDao() {
+        try {
+            List<Categoria> resultado = new ArrayList<>();
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT c FROM Categoria c WHERE c.estadpCategoria = :estadpCategoria");
+            Query query;
+            query = getEntityManager().createQuery(sql.toString()).setParameter("estadpCategoria", true);
+            resultado = query.getResultList();
+            if (resultado != null && !resultado.isEmpty()) {
+                return resultado;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    
+    
 
 }

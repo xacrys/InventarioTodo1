@@ -5,6 +5,7 @@
  */
 package todo1.inventario.servicio;
 
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -30,5 +31,11 @@ public class CategoriaServicio {
     public Categoria buscarCategoriaPorNombre(String nombre){
         return categoriaDao.buscarCategoriaPorNombreDao(nombre);
     }
+    
+    public List<Categoria> obtenerCategoriasActivas(){
+        return categoriaDao.obtenerCategoriasActivasDao();
+    }
+    
+    
 
 }
