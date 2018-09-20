@@ -5,6 +5,7 @@
  */
 package todo1.inventario.controlador;
 
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -26,12 +27,15 @@ public class CategoriaControlador extends Utilitarios {
 
     @EJB
     private CategoriaServicio categoriaServicio;
+    
 
     private Categoria categoria;
+    private List<Categoria> listaCategoriasActivas;
 
     @PostConstruct
     public void inicio() {
         categoria = new Categoria();
+        listaCategoriasActivas = categoriaServicio.obtenerCategoriasActivas();
 
     }
 
@@ -68,6 +72,20 @@ public class CategoriaControlador extends Utilitarios {
      */
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    /**
+     * @return the listaCategoriasActivas
+     */
+    public List<Categoria> getListaCategoriasActivas() {
+        return listaCategoriasActivas;
+    }
+
+    /**
+     * @param listaCategoriasActivas the listaCategoriasActivas to set
+     */
+    public void setListaCategoriasActivas(List<Categoria> listaCategoriasActivas) {
+        this.listaCategoriasActivas = listaCategoriasActivas;
     }
 
 }
