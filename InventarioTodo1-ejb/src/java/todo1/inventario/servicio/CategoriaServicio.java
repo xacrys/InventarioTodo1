@@ -26,5 +26,9 @@ public class CategoriaServicio {
         Categoria cat = categoriaDao.editEntity(categoria);
         return cat != null;
     }
+    
+    public Categoria buscarCategoriaPorNombre(String nombre){
+        return categoriaDao.buscarCategoriaPorNombreDao(nombre);
+    }
 
 }
