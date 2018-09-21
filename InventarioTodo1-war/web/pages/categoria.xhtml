@@ -18,28 +18,30 @@
                         <p:panelGrid id="pgCategoria" columns="2" layout="grid">            
                             <p:outputLabel value="Nombre"><span class="rojo"> *</span></p:outputLabel>
 
-                            <p:inputText value="#{categoriaControlador.categoria.nombr}"></p:inputText>
+                            <p:inputText value="#{categoriaControlador.categoria.nombr}" required="true"
+                                         requiredMessage="Campo requerido"></p:inputText>
 
                             <p:outputLabel value="Descripción"></p:outputLabel>
 
-                            <p:inputText value="#{categoriaControlador.categoria.descripcionCategoria}"></p:inputText>
-
-
-                            <p:outputLabel value="Estado"><span class="rojo"> *</span></p:outputLabel>
-
-                            <p:selectBooleanButton  value="#{categoriaControlador.categoria.estadpCategoria}" onLabel="Activo" offLabel="Inactivo" style="width:100px" />
-
+                            <p:inputText value="#{categoriaControlador.categoria.descripcionCategoria}" ></p:inputText>
 
                         </p:panelGrid>
                         <center>
-                            <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{categoriaControlador.guardarCategoria}" process="frmCategoria" update="pgCategoria"></p:commandButton>
-                            <p:commandButton value="Limpiar" icon="ui-icon-refresh" actionListener="#{categoriaControlador.limpiarCategoria()}" process="frmCategoria" update="pgCategoria"></p:commandButton>
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{categoriaControlador.guardarCategoria}" 
+                                             process="frmCategoria" update="frmCategoria" rendered="#{!categoriaControlador.botonActualizarVisible}"></p:commandButton>
+                            <p:commandButton value="Actualizar" icon="ui-icon-pencil" actionListener="#{categoriaControlador.actualizarCategoria}" process="frmCategoria" update="frmCategoria"
+                                             rendered="#{categoriaControlador.botonActualizarVisible}"></p:commandButton>
+                            <p:commandButton value="Limpiar" icon="ui-icon-refresh" actionListener="#{categoriaControlador.limpiarCategoria()}" process="frmCategoria" update="frmCategoria"></p:commandButton>
                         </center>
 
                     </p:panel>
 
                     <p:panel header="Lista de Categorías registradas" >
-                        <p:dataTable var="cat" value="#{categoriaControlador.listaCategoriasActivas}">
+                        <p:dataTable var="cat" value="#{categoriaControlador.listaCategoriasActivas}"
+                                     rows="10"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     >
                             <p:column headerText="Id">
                                 <h:outputText value="#{cat.idCategoria}" />
                             </p:column>
@@ -51,16 +53,16 @@
                             <p:column headerText="Descripción">
                                 <h:outputText value="#{cat.descripcionCategoria}" />
                             </p:column>
-                            
-                            <p:column headerText="Actualizar">
-                                <p:commandButton icon="ui-icon-refresh"></p:commandButton>
-                            </p:column>
-                            
-                            <p:column headerText="Eliminar">
-                                <p:commandButton icon="ui-icon-refresh"></p:commandButton>
+
+                            <p:column headerText="..." styleClass="centrar" style="width: 60px">
+                                <p:commandButton icon="ui-icon-pencil" process="@this" actionListener="#{categoriaControlador.habilitarActualizacion(cat)}" update="frmCategoria"></p:commandButton>
                             </p:column>
 
-                           
+                            <p:column headerText="..." styleClass="centrar" style="width: 60px">
+                                <p:commandButton icon="ui-icon-close" process="@this" actionListener="#{categoriaControlador.eliminarCategoria(cat)}" update="frmCategoria"></p:commandButton>
+                            </p:column>
+
+
                         </p:dataTable>
                     </p:panel>
                 </h:form>

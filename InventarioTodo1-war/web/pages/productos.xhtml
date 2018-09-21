@@ -10,36 +10,80 @@
     <ui:define name="contenido" >
         <div class="ui-g">
             <div class="ui-g-12">
-                <h:form>
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <h:form id="frmProducto">
                     <p:panel header="Registro de Productos" >
-                        <p:panelGrid columns="2" layout="grid">            
-
+                        <p:panelGrid id="pgCategoria" columns="2" layout="grid"> 
                             <p:outputLabel value="Categoría:"><span class="rojo"> *</span></p:outputLabel>
-                            <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" style="width:125px">
-                                <f:selectItem itemLabel="Select One" itemValue="" />
-                                <f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
-                                <f:selectItem itemLabel="PS4" itemValue="PS4" />
-                                <f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+                            <p:selectOneMenu id="soCategoria" value="#{productoControlador.idCategoria}" styleClass="ocuparMaximo"
+                                             required="true" requiredMessage="Escoja una Categoría">
+                                <f:selectItem itemLabel="--Seleccione una Categoría--" itemValue="" />
+                                <f:selectItems value="#{productoControlador.listaCategorias}" />
                             </p:selectOneMenu>
 
-                            <p:outputLabel value="Nombre:"><span class="rojo"> *</span></p:outputLabel>
-                            <p:inputText ></p:inputText>
+                            <p:outputLabel value="Nombre del Producto:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:inputText value="#{productoControlador.producto.nombreProducto}" required="true"
+                                         requiredMessage="Campo requerido"></p:inputText>
 
-
-                            <p:outputLabel value="Precio de Compra:"><span class="rojo"> *</span></p:outputLabel>                            
-                            <p:inputNumber id="input1" value="#{inputNumberView.input1}"></p:inputNumber>  
-
-                            <p:outputLabel value="Precio de Venta:"><span class="rojo"> *</span></p:outputLabel>                            
-                            <p:inputNumber id="input2" value="#{inputNumberView.input1}"></p:inputNumber> 
-
+                            <p:outputLabel value="Precio de Compra:"></p:outputLabel>
+                            <p:inputNumber  value="#{productoControlador.producto.preciocProducto}"></p:inputNumber>
+                            
+                             <p:outputLabel value="Precio de Venta:"></p:outputLabel>
+                             <p:inputNumber  value="#{productoControlador.producto.preciouProducto}" ></p:inputNumber>
 
                         </p:panelGrid>
                         <center>
-                            <p:commandButton value="Guardar" icon="ui-icon-disk"></p:commandButton>
-                            <p:commandButton value="Limpiar" icon="ui-icon-refresh"></p:commandButton>
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" actionListener="#{productoControlador.guardarProducto()}" 
+                                             process="frmProducto" update="frmProducto" rendered="#{!productoControlador.botonActualizarVisible}"></p:commandButton>
+                                             <p:commandButton value="Actualizar" icon="ui-icon-pencil" actionListener="#{productoControlador.actualizarProducto()}" process="frmProducto" update="frmProducto"
+                                             rendered="#{productoControlador.botonActualizarVisible}"></p:commandButton>
+                                             <p:commandButton value="Limpiar" icon="ui-icon-refresh" actionListener="#{productoControlador.limpiarProducto()}" process="frmProducto" update="frmProducto"></p:commandButton>
                         </center>
+
                     </p:panel>
-                   
+
+                    <p:panel header="Lista de Categorías registradas" >
+                        <p:dataTable var="pro" value="#{productoControlador.listaProductosActivos}"
+                                     rows="10"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     emptyMessage="No existen datos para mostrar">
+                            <p:column headerText="Id">
+                                <h:outputText value="#{pro.idProducto}" />
+                            </p:column>
+
+                             <p:column headerText="Categoría:">
+                                <h:outputText value="#{pro.idCategoria.descripcionCategoria}" />
+                            </p:column>
+                            
+                            
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{pro.nombreProducto}" />
+                            </p:column>
+                            
+                       
+                            
+                            <p:column headerText="Precio Compra">
+                                <h:outputText value="#{pro.preciocProducto}" />
+                            </p:column>
+
+                            <p:column headerText="Precio de Venta">
+                                <h:outputText value="#{pro.preciouProducto}" />
+                            </p:column>
+
+                            <p:column headerText="..." styleClass="centrar" style="width: 60px">
+                                <p:commandButton icon="ui-icon-pencil" process="@this" actionListener="#{productoControlador.habilitarActualizacion(pro)}" update="frmProducto"></p:commandButton>
+                            </p:column>
+
+                            <p:column headerText="..." styleClass="centrar" style="width: 60px">
+                                <p:commandButton icon="ui-icon-close" process="@this" actionListener="#{productoControlador.eliminarProducto(pro)}" update="frmProducto"></p:commandButton>
+                            </p:column>
+
+
+                        </p:dataTable>
+                    </p:panel>
                 </h:form>
             </div>           
         </div>

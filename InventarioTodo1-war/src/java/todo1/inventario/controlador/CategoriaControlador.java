@@ -27,21 +27,23 @@ public class CategoriaControlador extends Utilitarios {
 
     @EJB
     private CategoriaServicio categoriaServicio;
-    
 
     private Categoria categoria;
     private List<Categoria> listaCategoriasActivas;
+    private Boolean botonActualizarVisible;
 
     @PostConstruct
     public void inicio() {
         categoria = new Categoria();
         listaCategoriasActivas = categoriaServicio.obtenerCategoriasActivas();
+        setBotonActualizarVisible((Boolean) false);
 
     }
 
     public void guardarCategoria() {
 
         if (categoriaServicio.buscarCategoriaPorNombre(categoria.getNombr()) == null) {
+            categoria.setEstadpCategoria(true);
             Boolean categoriaExiste = categoriaServicio.guardarCategoria(categoria);
             if (categoriaExiste) {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
@@ -58,6 +60,34 @@ public class CategoriaControlador extends Utilitarios {
     public void limpiarCategoria() {
         inicio();
         RequestContext.getCurrentInstance().reset("frmCategoria");
+    }
+
+    public void habilitarActualizacion(Categoria cat) {
+        categoria = cat;
+        setBotonActualizarVisible((Boolean) true);
+    }
+
+    public void actualizarCategoria() {
+        setBotonActualizarVisible((Boolean) false);
+        Boolean categoriaExiste = categoriaServicio.guardarCategoria(categoria);
+        if (categoriaExiste) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+        }
+        inicio();
+    }
+
+    public void eliminarCategoria(Categoria cat) {
+        cat.setEstadpCategoria(false);
+        Boolean categoriaExiste = categoriaServicio.guardarCategoria(cat);
+        if (categoriaExiste) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido eliminado exitosamente."));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido eliminado."));
+        }
+        inicio();
+
     }
 
     /**
@@ -86,6 +116,20 @@ public class CategoriaControlador extends Utilitarios {
      */
     public void setListaCategoriasActivas(List<Categoria> listaCategoriasActivas) {
         this.listaCategoriasActivas = listaCategoriasActivas;
+    }
+
+    /**
+     * @return the botonActualizarVisible
+     */
+    public Boolean getBotonActualizarVisible() {
+        return botonActualizarVisible;
+    }
+
+    /**
+     * @param botonActualizarVisible the botonActualizarVisible to set
+     */
+    public void setBotonActualizarVisible(Boolean botonActualizarVisible) {
+        this.botonActualizarVisible = botonActualizarVisible;
     }
 
 }

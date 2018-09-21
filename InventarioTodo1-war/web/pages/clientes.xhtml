@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="contenido" >
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <h:form id="frmCliente">
+                    <p:panel header="Registro de Clientes" >
+                        <p:panelGrid id="pgCliente" columns="2" layout="grid"> 
+                            <p:outputLabel value="Tipo de Documento:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">  
+                                <p:row>
+                                    <p:column>
+                                        <p:selectOneRadio  value="#{clienteControlador.idTipoDocumento}" style="margin: 0px;">
+                                            <f:selectItem itemLabel="Cedula" itemValue="1" />
+                                            <f:selectItem itemLabel="RUC" itemValue="2" />
+                                            <p:ajax update="frmCliente" event="valueChange" listener="#{clienteControlador.cambiarModelo}"/>
+                                        </p:selectOneRadio>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:outputLabel value="Número de Documento:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid id="pgCedula" styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputMask id="imNumDocumento" mask="#{clienteControlador.mascaraNumDocumento}"
+                                                     value="#{clienteControlador.usuario.numDocUsuario}"></p:inputMask>
+                                    </p:column> 
+                                    <p:column style="width: 60px;">
+                                        <p:commandButton icon="ui-icon-search" style="width: 60px" process="frmCliente:pgCedula" update="frmCliente" actionListener="#{clienteControlador.buscarCliente}"></p:commandButton>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <p:panel header="Información de la Persona con cédula" rendered="#{!clienteControlador.banderaPanelRucVisible}" >
+                        <p:panelGrid  columns="2" layout="grid">
+                            <p:outputLabel value="Nombre:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.nombreUsuario}"></p:inputText>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:outputLabel value="Dirección:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.direccionUsuario}"></p:inputText>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:outputLabel value="Correo Electrónico:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.mailUsuario}"></p:inputText>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:outputLabel value="Teléfono"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputMask  mask="9999999999" disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.telefonoUsuario}"></p:inputMask>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+                        </p:panelGrid> 
+                    </p:panel>
+
+                    <p:panel header="Información del Cliente con RUC" rendered="#{clienteControlador.banderaPanelRucVisible}">
+                        <p:panelGrid  columns="2" layout="grid">
+                            <p:outputLabel value="Razón Social"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.razonsUsuario}"></p:inputText>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:outputLabel value="Dirección del Negocio:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.direccionRsUsuario}"></p:inputText>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:outputLabel value="Correo Electrónico:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.mailRsUsuario}"></p:inputText>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:outputLabel value="Teléfono del Negocio"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputMask  mask="9999999999" disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.telefonoUsuario}"></p:inputMask>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+                        </p:panelGrid>
+                    </p:panel>
+                    <center>
+                        <p:commandButton value="Guardar" icon="ui-icon-disk"  
+                                         process="frmCliente" update="frmCliente" rendered="#{!clienteControlador.botonActualizarVisible}"
+                                         disabled="#{!clienteControlador.camposHabilitados}"></p:commandButton>
+                        <p:commandButton value="Actualizar" icon="ui-icon-pencil"  process="frmCliente" update="frmCliente"
+                                         rendered="#{clienteControlador.botonActualizarVisible}"></p:commandButton>
+                                         <p:commandButton value="Limpiar" icon="ui-icon-refresh"  process="frmCliente" update="frmCliente" actionListener="#{clienteControlador.limpiarCliente}"></p:commandButton>
+                    </center>
+                    
+                </h:form>
+            </div>           
+        </div>
+    </ui:define>    
+</ui:composition>
