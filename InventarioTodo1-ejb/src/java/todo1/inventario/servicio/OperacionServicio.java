@@ -5,9 +5,10 @@
  */
 package todo1.inventario.servicio;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import todo1.inventario.generico.Generico;
+import todo1.inventario.dao.OperacionDao;
 import todo1.inventario.modelo.Operacion;
 
 /**
@@ -16,7 +17,13 @@ import todo1.inventario.modelo.Operacion;
  */
 @LocalBean
 @Stateless
-public class OperacionServicio  {
+public class OperacionServicio {
 
-    
+    @EJB
+    private OperacionDao operacionDao;
+
+    public Operacion obtenerOperacionPorId(Integer idOperacion) {
+        return operacionDao.find(idOperacion);
+    }
+
 }

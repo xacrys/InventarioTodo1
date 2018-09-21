@@ -5,8 +5,11 @@
  */
 package todo1.inventario.servicio;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import todo1.inventario.dao.TransaccionDao;
+import todo1.inventario.modelo.Transaccion;
 
 /**
  *
@@ -15,5 +18,12 @@ import javax.ejb.Stateless;
 @LocalBean
 @Stateless
 public class TransaccionServicio {
+    
+    @EJB 
+    private TransaccionDao transaccionDao;
+    
+    public Transaccion obtenerTransaccionPorId(Integer idTransaccion){
+        return transaccionDao.find(idTransaccion);
+    }
     
 }
