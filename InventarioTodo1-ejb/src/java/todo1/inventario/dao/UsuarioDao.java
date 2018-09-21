@@ -46,6 +46,26 @@ public class UsuarioDao extends Generico<Usuario> {
             return null;
         }
      }
+     
+     public Usuario obtenerUsuarioPorCedulaDao(String cedula) {
+        try {
+            List<Usuario> resultado = new ArrayList<>();
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT u FROM Usuario u WHERE u.numDocUsuario = :numDocUsuario");
+            Query query;
+            query = getEntityManager().createQuery(sql.toString()).setParameter("numDocUsuario", cedula);
+            resultado = query.getResultList();
+            if (resultado != null && !resultado.isEmpty()) {
+                return resultado.get(0);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+     }
+     
+     
     
     
 }

@@ -25,4 +25,12 @@ public class UsuarioServicio {
     public Usuario buscarUsuarioCliente(String cedula, Integer codTipoUsuario) {
         return usuarioDao.buscarUsuarioClienteDao(cedula, codTipoUsuario);
     }
+    
+     public Usuario guardarUsuario(Usuario usuario) {
+        return usuarioDao.editEntity(usuario);
+    }
+     
+    public Usuario obtenerUsuarioPorCedula(String cedula){
+        return usuarioDao.obtenerUsuarioPorCedulaDao(cedula);
+    }
 }

@@ -5,8 +5,11 @@
  */
 package todo1.inventario.servicio;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import todo1.inventario.dao.TipoUsuarioDao;
+import todo1.inventario.modelo.TipoUsuario;
 
 /**
  *
@@ -15,4 +18,11 @@ import javax.ejb.Stateless;
 @LocalBean
 @Stateless
 public class TipoUsuarioServicio {
+
+    @EJB
+    private TipoUsuarioDao tipoUsuarioDao;
+
+    public TipoUsuario obtenerTipoUsuarioPorId(Integer idTipoUsuario) {
+        return tipoUsuarioDao.obtenerTipoUsuarioPorIdDao(idTipoUsuario);
+    }
 }
