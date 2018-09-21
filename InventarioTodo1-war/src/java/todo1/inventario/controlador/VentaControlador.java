@@ -5,6 +5,8 @@
  */
 package todo1.inventario.controlador;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -14,12 +16,16 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
+import todo1.inventario.dto.DetalleProductoDto;
 import todo1.inventario.modelo.Categoria;
+import todo1.inventario.modelo.DetalleTransaccion;
+import todo1.inventario.modelo.Operacion;
 import todo1.inventario.modelo.Producto;
 import todo1.inventario.modelo.TipoUsuario;
 import todo1.inventario.modelo.Usuario;
 import todo1.inventario.modelo.UsuarioTipoUsuario;
 import todo1.inventario.servicio.CategoriaServicio;
+import todo1.inventario.servicio.OperacionServicio;
 import todo1.inventario.servicio.ProductoServicio;
 import todo1.inventario.servicio.TipoUsuarioServicio;
 import todo1.inventario.servicio.UsuarioServicio;
@@ -33,6 +39,10 @@ import todo1.inventario.utilitarios.Utilitarios;
 @ManagedBean
 @ViewScoped
 public class VentaControlador extends Utilitarios {
+
+   
+
+   
 
     @EJB
     private UsuarioServicio usuarioServicio;
@@ -48,6 +58,9 @@ public class VentaControlador extends Utilitarios {
 
     @EJB
     private ProductoServicio productoServicio;
+    
+     @EJB
+    private OperacionServicio operacionServicio;
 
     private Integer idTipoDocumento;
     private Boolean botonActualizarVisible;
@@ -61,6 +74,8 @@ public class VentaControlador extends Utilitarios {
     private Integer cantidad;
     private Integer maximoStock;
     private Integer idProducto;
+    private Operacion operacion;
+    private List<DetalleProductoDto> listaDetalles;
 
     @PostConstruct
     public void inicio() {
@@ -73,6 +88,8 @@ public class VentaControlador extends Utilitarios {
 
         setListaCategorias(categoriaServicio.obtenerCategoriasActivas());
         setCantidad(0);
+        setOperacion(operacionServicio.obtenerOperacionPorId(1));
+        setListaDetalles(new ArrayList<>());
 
     }
 
@@ -127,7 +144,9 @@ public class VentaControlador extends Utilitarios {
     }
     
     public void agregarDetalle(){
-        
+        BigDecimal monto = producto.getPreciouProducto().multiply(new BigDecimal(cantidad));
+        DetalleProductoDto detalle = new DetalleProductoDto(producto, producto.getPreciouProducto(), cantidad, monto);
+        listaDetalles.add(detalle);
     }
 
     public void listarProductos() {
@@ -329,6 +348,34 @@ public class VentaControlador extends Utilitarios {
      */
     public void setListaProductos(List<SelectItem> listaProductos) {
         this.listaProductos = listaProductos;
+    }
+    
+     /**
+     * @return the operacion
+     */
+    public Operacion getOperacion() {
+        return operacion;
+    }
+
+    /**
+     * @param operacion the operacion to set
+     */
+    public void setOperacion(Operacion operacion) {
+        this.operacion = operacion;
+    }
+
+    /**
+     * @return the listaDetalles
+     */
+    public List<DetalleProductoDto> getListaDetalles() {
+        return listaDetalles;
+    }
+
+    /**
+     * @param listaDetalles the listaDetalles to set
+     */
+    public void setListaDetalles(List<DetalleProductoDto> listaDetalles) {
+        this.listaDetalles = listaDetalles;
     }
 
 }

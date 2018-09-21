@@ -169,15 +169,53 @@
                                         </p:selectOneMenu>
                                     </p:column>
                                     <p:column>
-                                        <p:spinner id="basic" value="#{ventaControlador.cantidad}" min="0" max="#{ventaControlador.maximoStock}"
+                                        <p:spinner id="basic" value="#{ventaControlador.cantidad}" min="0" 
                                                    required="true" requiredMessage="la cantidad deve ser mayor a 0"/>
                                     </p:column>
                                     <p:column>
-                                        <p:commandButton icon="ui-icon-plus" process="frmVenta:pgAgregaProductos" update="frmVenta"
+                                        <p:commandButton icon="ui-icon-plus" process="frmVenta:pgAgregaProductos" update="frmVenta:dtDetalles"
                                                          actionListener="#{ventaControlador.agregarDetalle()}"></p:commandButton>
                                     </p:column>
                                 </p:row>
                             </p:panelGrid>
+                            <p:dataTable id="dtDetalles" var="pro" value="#{ventaControlador.listaDetalles}"
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         emptyMessage="No existen datos para mostrar">
+                                <p:column headerText="Id">
+                                    <h:outputText value="#{pro.producto.idProducto}" />
+                                </p:column>
+
+                                <p:column headerText="Nombre">
+                                    <h:outputText value="#{pro.producto.nombreProducto}" />
+                                </p:column>
+
+
+                                <p:column headerText="Precio">
+                                    <h:outputText value="#{pro.preciouProducto}" />
+                                </p:column>
+
+
+
+                                <p:column headerText="Cantidad">
+                                    <h:outputText value="#{pro.cantidad}" />
+                                </p:column>
+
+                                <p:column headerText="Monto">
+                                    <h:outputText value="#{pro.monto}" />
+                                </p:column>
+
+<!--                                <p:column headerText="..." styleClass="centrar" style="width: 60px">
+                                    <p:commandButton icon="ui-icon-pencil" process="@this" actionListener="{productoControlador.habilitarActualizacion(pro)}" update="frmProducto"></p:commandButton>
+                                </p:column>
+
+                                <p:column headerText="..." styleClass="centrar" style="width: 60px">
+                                    <p:commandButton icon="ui-icon-close" process="@this" actionListener="{productoControlador.eliminarProducto(pro)}" update="frmProducto"></p:commandButton>
+                                </p:column>-->
+
+
+                            </p:dataTable>
 
                         </p:panelGrid>
                     </p:panel>
