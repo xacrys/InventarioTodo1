@@ -58,6 +58,27 @@ public class CategoriaDao extends Generico<Categoria> {
             return null;
         }
     }
+     
+      public Categoria buscarCategoriaPorIdDao(Integer idCategoria) {
+        try {
+            List<Categoria> resultado = new ArrayList<>();
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT c FROM Categoria c WHERE c.idCategoria = :idCategoria");
+            Query query;
+            query = getEntityManager().createQuery(sql.toString()).setParameter("idCategoria", idCategoria);
+            resultado = query.getResultList();
+            if (resultado != null && !resultado.isEmpty()) {
+                return resultado.get(0);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+     
+     
+     
     
     
     
