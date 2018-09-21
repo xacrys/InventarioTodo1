@@ -26,7 +26,7 @@ import todo1.inventario.utilitarios.Utilitarios;
  */
 @ManagedBean
 @ViewScoped
-public class ClienteControlador extends Utilitarios {
+public class ProveedorControlador extends Utilitarios {
 
     @EJB
     private UsuarioServicio usuarioServicio;
@@ -39,39 +39,27 @@ public class ClienteControlador extends Utilitarios {
 
     private Integer idTipoDocumento;
     private Boolean botonActualizarVisible;
-    private Boolean banderaPanelRucVisible;
     private Boolean camposHabilitados;
-    private String mascaraNumDocumento;
     private Usuario usuario;
 
     @PostConstruct
     public void inicio() {
-        setIdTipoDocumento(1);
-        setBanderaPanelRucVisible(false);
+        setIdTipoDocumento(2);
         setBotonActualizarVisible(false);
         setCamposHabilitados(false);
-        setMascaraNumDocumento("9999999999");
         setUsuario(new Usuario());
 
     }
 
-    public void cambiarModelo() {
-        setBanderaPanelRucVisible(idTipoDocumento != 1);
-        setMascaraNumDocumento(idTipoDocumento != 1 ? "9999999999999" : "9999999999");
-        setUsuario(new Usuario());
-        setBotonActualizarVisible(false);
-        setCamposHabilitados(false);
-    }
-
-    public void buscarCliente() {
-        if (usuario.getNumDocUsuario() != null && (usuario.getNumDocUsuario().length() == 10 || usuario.getNumDocUsuario().length() == 13)) {
-            Usuario usuarioExiste = usuarioServicio.buscarUsuarioCliente(usuario.getNumDocUsuario(), 1);
+    public void buscarProveedor() {
+        if (usuario.getNumDocUsuario() != null && usuario.getNumDocUsuario().length() == 13) {
+            Usuario usuarioExiste = usuarioServicio.buscarUsuarioCliente(usuario.getNumDocUsuario(), 2);
             if (usuarioExiste != null) {
                 usuario = usuarioExiste;
                 setBotonActualizarVisible(true);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El cliente ya existe puede modificarlo."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El proveedor ya existe puede modificarlo."));
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El cliente no existe puede registralo."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El proveedor no existe puede registralo."));
             }
             setCamposHabilitados(true);
         } else {
@@ -79,19 +67,19 @@ public class ClienteControlador extends Utilitarios {
         }
     }
 
-    public void guardarCliente() {
+    public void guardarProveedor() {
         try {
             usuario.setEstadoUsuario(true);
-            usuario.setTipoDocUsuario(idTipoDocumento);
-            Usuario clienteExiste = usuarioServicio.obtenerUsuarioPorCedula(usuario.getNumDocUsuario());
-            Usuario clienteGuardado = null;
-            if (clienteExiste != null) {
-               getUsuario().setIdUsuario(clienteExiste.getIdUsuario());
+            usuario.setTipoDocUsuario(getIdTipoDocumento());
+            Usuario proveedorExiste = usuarioServicio.obtenerUsuarioPorCedula(usuario.getNumDocUsuario());
+            Usuario proveedorGuardado = null;
+            if (proveedorExiste != null) {
+               getUsuario().setIdUsuario(proveedorExiste.getIdUsuario());
             }
-            clienteGuardado = usuarioServicio.guardarUsuario(getUsuario());
-            TipoUsuario tipoUsuario = tipoUsuarioServicio.obtenerTipoUsuarioPorId(1);
+            proveedorGuardado = usuarioServicio.guardarUsuario(getUsuario());
+            TipoUsuario tipoUsuario = tipoUsuarioServicio.obtenerTipoUsuarioPorId(2);
             UsuarioTipoUsuario usuarioTipoUsuario = new UsuarioTipoUsuario();
-            usuarioTipoUsuario.setIdUsuario(clienteGuardado);
+            usuarioTipoUsuario.setIdUsuario(proveedorGuardado == null ? proveedorExiste : proveedorGuardado);
             usuarioTipoUsuario.setIdTipoUsuario(tipoUsuario);
             usuarioTipoUsuarioServicio.guardarUsuarioTipoUsuario(usuarioTipoUsuario);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
@@ -102,14 +90,14 @@ public class ClienteControlador extends Utilitarios {
 
     }
 
-    public void limpiarCliente() {
+    public void limpiarProveedor() {
         inicio();
-        RequestContext.getCurrentInstance().reset("frmCliente");
+        RequestContext.getCurrentInstance().reset("frmProveedor");
     }
 
-    public void actualizarCliente() {
-        Usuario clienteGuardado = usuarioServicio.guardarUsuario(getUsuario());
-        if (clienteGuardado != null) {
+    public void actualizarProveedor() {
+        Usuario proveedorGuardado = usuarioServicio.guardarUsuario(getUsuario());
+        if (proveedorGuardado != null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
@@ -154,34 +142,6 @@ public class ClienteControlador extends Utilitarios {
      */
     public void setBotonActualizarVisible(Boolean botonActualizarVisible) {
         this.botonActualizarVisible = botonActualizarVisible;
-    }
-
-    /**
-     * @return the banderaPanelRucVisible
-     */
-    public Boolean getBanderaPanelRucVisible() {
-        return banderaPanelRucVisible;
-    }
-
-    /**
-     * @param banderaPanelRucVisible the banderaPanelRucVisible to set
-     */
-    public void setBanderaPanelRucVisible(Boolean banderaPanelRucVisible) {
-        this.banderaPanelRucVisible = banderaPanelRucVisible;
-    }
-
-    /**
-     * @return the mascaraNumDocumento
-     */
-    public String getMascaraNumDocumento() {
-        return mascaraNumDocumento;
-    }
-
-    /**
-     * @param mascaraNumDocumento the mascaraNumDocumento to set
-     */
-    public void setMascaraNumDocumento(String mascaraNumDocumento) {
-        this.mascaraNumDocumento = mascaraNumDocumento;
     }
 
     /**

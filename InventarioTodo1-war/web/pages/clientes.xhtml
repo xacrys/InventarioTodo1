@@ -51,7 +51,8 @@
                             <p:panelGrid styleClass="sinEspacios">
                                 <p:row>
                                     <p:column>
-                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.nombreUsuario}"></p:inputText>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.nombreUsuario}"
+                                                     required="#{!clienteControlador.banderaPanelRucVisible}" requiredMessage="Nombre Requerido"></p:inputText>
                                     </p:column>  
                                 </p:row>
                             </p:panelGrid>
@@ -60,7 +61,8 @@
                             <p:panelGrid styleClass="sinEspacios">
                                 <p:row>
                                     <p:column>
-                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.direccionUsuario}"></p:inputText>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.direccionUsuario}"
+                                                     required="#{!clienteControlador.banderaPanelRucVisible}" requiredMessage="Dirección Requerida"></p:inputText>
                                     </p:column>  
                                 </p:row>
                             </p:panelGrid>
@@ -69,7 +71,8 @@
                             <p:panelGrid styleClass="sinEspacios">
                                 <p:row>
                                     <p:column>
-                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.mailUsuario}"></p:inputText>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.mailUsuario}"
+                                                     required="#{!clienteControlador.banderaPanelRucVisible}" requiredMessage="Email Requerido"></p:inputText>
                                     </p:column>  
                                 </p:row>
                             </p:panelGrid>
@@ -78,7 +81,8 @@
                             <p:panelGrid styleClass="sinEspacios">
                                 <p:row>
                                     <p:column>
-                                        <p:inputMask  mask="9999999999" disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.telefonoUsuario}"></p:inputMask>
+                                        <p:inputMask  mask="9999999999" disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.telefonoUsuario}"
+                                                      required="#{!clienteControlador.banderaPanelRucVisible}" requiredMessage="Teléfono Requerido"></p:inputMask>
                                     </p:column>  
                                 </p:row>
                             </p:panelGrid>
@@ -91,7 +95,8 @@
                             <p:panelGrid styleClass="sinEspacios">
                                 <p:row>
                                     <p:column>
-                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.razonsUsuario}"></p:inputText>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.razonsUsuario}"
+                                                     required="#{clienteControlador.banderaPanelRucVisible}" requiredMessage="Razón Social Requerida"></p:inputText>
                                     </p:column>  
                                 </p:row>
                             </p:panelGrid>
@@ -100,7 +105,8 @@
                             <p:panelGrid styleClass="sinEspacios">
                                 <p:row>
                                     <p:column>
-                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.direccionRsUsuario}"></p:inputText>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.direccionRsUsuario}"
+                                                     required="#{clienteControlador.banderaPanelRucVisible}" requiredMessage="Dirección Requerida"></p:inputText>
                                     </p:column>  
                                 </p:row>
                             </p:panelGrid>
@@ -109,7 +115,8 @@
                             <p:panelGrid styleClass="sinEspacios">
                                 <p:row>
                                     <p:column>
-                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.mailRsUsuario}"></p:inputText>
+                                        <p:inputText disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.mailRsUsuario}"
+                                                     required="#{clienteControlador.banderaPanelRucVisible}" requiredMessage="Email Requerido"></p:inputText>
                                     </p:column>  
                                 </p:row>
                             </p:panelGrid>
@@ -118,7 +125,8 @@
                             <p:panelGrid styleClass="sinEspacios">
                                 <p:row>
                                     <p:column>
-                                        <p:inputMask  mask="9999999999" disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.telefonoUsuario}"></p:inputMask>
+                                        <p:inputMask  mask="9999999999" disabled="#{!clienteControlador.camposHabilitados}" value="#{clienteControlador.usuario.telefonoUsuario}"
+                                                      required="#{clienteControlador.banderaPanelRucVisible}" requiredMessage="Teléfono Requerido"></p:inputMask>
                                     </p:column>  
                                 </p:row>
                             </p:panelGrid>
@@ -127,12 +135,14 @@
                     <center>
                         <p:commandButton value="Guardar" icon="ui-icon-disk"  
                                          process="frmCliente" update="frmCliente" rendered="#{!clienteControlador.botonActualizarVisible}"
-                                         disabled="#{!clienteControlador.camposHabilitados}"></p:commandButton>
+                                         disabled="#{!clienteControlador.camposHabilitados}"
+                                         actionListener="#{clienteControlador.guardarCliente}"></p:commandButton>
                         <p:commandButton value="Actualizar" icon="ui-icon-pencil"  process="frmCliente" update="frmCliente"
-                                         rendered="#{clienteControlador.botonActualizarVisible}"></p:commandButton>
-                                         <p:commandButton value="Limpiar" icon="ui-icon-refresh"  process="frmCliente" update="frmCliente" actionListener="#{clienteControlador.limpiarCliente}"></p:commandButton>
+                                         rendered="#{clienteControlador.botonActualizarVisible}"
+                                         actionListener="#{clienteControlador.actualizarCliente()}"></p:commandButton>
+                        <p:commandButton value="Limpiar" icon="ui-icon-refresh"  process="frmCliente" update="frmCliente" actionListener="#{clienteControlador.limpiarCliente}"></p:commandButton>
                     </center>
-                    
+
                 </h:form>
             </div>           
         </div>

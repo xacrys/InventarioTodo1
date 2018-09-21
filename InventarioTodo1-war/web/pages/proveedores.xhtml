@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="contenido" >
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <h:form id="frmProveedor">
+                    <p:panel header="Registro de Proveedor" >
+                        <p:panelGrid  columns="2" layout="grid">
+                            <p:outputLabel value="Número de Documento:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid id="pgCedula" styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputMask id="imNumDocumento" mask="9999999999999"
+                                                     value="#{proveedorControlador.usuario.numDocUsuario}"></p:inputMask>
+                                    </p:column> 
+                                    <p:column style="width: 60px;">
+                                        <p:commandButton icon="ui-icon-search" style="width: 60px" process="frmProveedor:pgCedula" update="frmProveedor" actionListener="#{proveedorControlador.buscarProveedor}"></p:commandButton>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+
+                        </p:panelGrid>
+                    </p:panel>
+
+
+
+                    <p:panel header="Información del Proveedor" >
+                        <p:panelGrid  columns="2" layout="grid">
+                            <p:outputLabel value="Razón Social"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputText disabled="#{!proveedorControlador.camposHabilitados}" value="#{proveedorControlador.usuario.razonsUsuario}"
+                                                     required="true" requiredMessage="Razón Social Requerida"></p:inputText>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:outputLabel value="Dirección del Negocio:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputText disabled="#{!proveedorControlador.camposHabilitados}" value="#{proveedorControlador.usuario.direccionRsUsuario}"
+                                                     required="true" requiredMessage="Dirección Requerida"></p:inputText>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:outputLabel value="Correo Electrónico:"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputText disabled="#{!proveedorControlador.camposHabilitados}" value="#{proveedorControlador.usuario.mailRsUsuario}"
+                                                     required="true" requiredMessage="Email Requerido"></p:inputText>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+
+                            <p:outputLabel value="Teléfono del Negocio"><span class="rojo"> *</span></p:outputLabel>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputMask  mask="9999999999" disabled="#{!proveedorControlador.camposHabilitados}" value="#{proveedorControlador.usuario.telefonoUsuario}"
+                                                      required="true" requiredMessage="Teléfono Requerido"></p:inputMask>
+                                    </p:column>  
+                                </p:row>
+                            </p:panelGrid>
+                        </p:panelGrid>
+                    </p:panel>
+                    <center>
+                        <p:commandButton value="Guardar" icon="ui-icon-disk"  
+                                         process="frmProveedor" update="frmProveedor" rendered="#{!proveedorControlador.botonActualizarVisible}"
+                                         disabled="#{!proveedorControlador.camposHabilitados}"
+                                         actionListener="#{proveedorControlador.guardarProveedor}"></p:commandButton>
+                        <p:commandButton value="Actualizar" icon="ui-icon-pencil"  process="frmProveedor" update="frmProveedor"
+                                         rendered="#{proveedorControlador.botonActualizarVisible}"
+                                         actionListener="#{proveedorControlador.actualizarProveedor()}"></p:commandButton>
+                        <p:commandButton value="Limpiar" icon="ui-icon-refresh"  process="frmProveedor" update="frmProveedor" actionListener="#{proveedorControlador.limpiarProveedor}"></p:commandButton>
+                    </center>
+
+                </h:form>
+            </div>           
+        </div>
+    </ui:define>    
+</ui:composition>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="contenido" >
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <h:form id="frmVenta">
+                    <p:panel header="FACTURA" >
+                        <p:panelGrid id="pgCliente" columns="2" layout="grid"> 
+                            
+                            <p:panelGrid styleClass="sinEspacios">  
+                                <p:row>
+                                    <p:column>
+                                        <p:selectOneRadio  value="#{ventaControlador.idTipoDocumento}" style="margin: 0px;">
+                                            <f:selectItem itemLabel="Cedula" itemValue="1" />
+                                            <f:selectItem itemLabel="RUC" itemValue="2" />
+                                            <p:ajax update="frmVenta" event="valueChange" listener="#{ventaControlador.cambiarModelo}"/>
+                                        </p:selectOneRadio>
+                                    </p:column>
+                                </p:row>
+                            </p:panelGrid>
+
+ 
+                            <p:panelGrid id="pgCedula" styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:inputMask id="imNumDocumento" mask="#{ventaControlador.mascaraNumDocumento}"
+                                                     value="#{ventaControlador.usuario.numDocUsuario}"></p:inputMask>
+                                    </p:column> 
+                                    <p:column style="width: 60px;">
+                                        <p:commandButton icon="ui-icon-search" style="width: 60px" process="frmVenta:pgCedula" update="frmVenta" actionListener="#{ventaControlador.buscarCliente}"></p:commandButton>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+                            
+                            
+
+                        </p:panelGrid>
+                    </p:panel>
+
+                    <p:panel header="CLIENTE" rendered="#{!ventaControlador.banderaPanelRucVisible}" >
+                        <p:panelGrid  columns="2" layout="grid">
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Nombre:"></p:outputLabel>
+                                    </p:column> 
+                                    <p:column>
+                                        <p:outputLabel value="Nombre:"></p:outputLabel>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Dirección:"></p:outputLabel>
+                                    </p:column> 
+                                    <p:column >
+                                        <p:outputLabel value="Dirección:"></p:outputLabel>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Correo Electrónico:"></p:outputLabel>
+                                    </p:column> 
+                                    <p:column>
+                                        <p:outputLabel value="Correo Electrónico:"></p:outputLabel>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid  styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                       <p:outputLabel value="Teléfono"></p:outputLabel>
+                                    </p:column> 
+                                    <p:column>
+                                         <p:outputLabel value="Teléfono"></p:outputLabel>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+                        </p:panelGrid> 
+                    </p:panel>
+                    
+                    <p:panel header="CLIENTE" rendered="#{ventaControlador.banderaPanelRucVisible}" >
+                        <p:panelGrid  columns="2" layout="grid">
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Nombre:"></p:outputLabel>
+                                    </p:column> 
+                                    <p:column>
+                                        <p:outputLabel value="Nombre:"></p:outputLabel>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Dirección:"></p:outputLabel>
+                                    </p:column> 
+                                    <p:column >
+                                        <p:outputLabel value="Dirección:"></p:outputLabel>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                        <p:outputLabel value="Correo Electrónico:"><span class="rojo"> *</span></p:outputLabel>
+                                    </p:column> 
+                                    <p:column >
+                                        <p:outputLabel value="Correo Electrónico:"><span class="rojo"> *</span></p:outputLabel>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+                            <p:panelGrid  styleClass="sinEspacios">
+                                <p:row>
+                                    <p:column>
+                                       <p:outputLabel value="Teléfono"><span class="rojo"> *</span></p:outputLabel>
+                                    </p:column> 
+                                    <p:column>
+                                         <p:outputLabel value="Teléfono"><span class="rojo"> *</span></p:outputLabel>
+                                    </p:column> 
+                                </p:row>
+                            </p:panelGrid>
+                        </p:panelGrid> 
+                    </p:panel>
+                    <p:panel header="DETALLE FACTURA">
+                        
+                    </p:panel>
+
+                    
+                    <center>
+                        <p:commandButton value="Guardar" icon="ui-icon-disk"  
+                                         process="frmVenta" update="frmVenta" rendered="#{!ventaControlador.botonActualizarVisible}"
+                                         disabled="#{!ventaControlador.camposHabilitados}"
+                                         actionListener="#{ventaControlador.guardarCliente}"></p:commandButton>
+                        <p:commandButton value="Actualizar" icon="ui-icon-pencil"  process="frmVenta" update="frmVenta"
+                                         rendered="#{ventaControlador.botonActualizarVisible}"
+                                         actionListener="#{ventaControlador.actualizarCliente()}"></p:commandButton>
+                        <p:commandButton value="Limpiar" icon="ui-icon-refresh"  process="frmVenta" update="frmVenta" actionListener="#{ventaControlador.limpiarCliente}"></p:commandButton>
+                    </center>
+
+                </h:form>
+            </div>           
+        </div>
+    </ui:define>    
+</ui:composition>
