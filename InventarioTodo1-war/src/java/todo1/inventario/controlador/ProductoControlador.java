@@ -55,7 +55,7 @@ public class ProductoControlador extends Utilitarios {
 
     public void guardarProducto() {
 
-        if (productoServicio.buscarCategoriaPorNombre(getProducto().getNombreProducto()) == null) {
+        if (productoServicio.buscarProductoPorNombre(getProducto().getNombreProducto()) == null) {
             getProducto().setIdCategoria(categoriaServicio.buscarCategoriaPorId(idCategoria));
             getProducto().setStock(0);
             getProducto().setEstadoProducto(true);
