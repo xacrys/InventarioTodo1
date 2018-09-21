@@ -61,6 +61,26 @@ public class ProductoDao extends Generico<Producto> {
             return null;
         }
     }
+     
+     public List<Producto> obtenerListaProductosActivosPorCategoriaDao(Categoria categoria) {
+        try {
+            List<Producto> resultado ;
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT * FROM todo1.producto p where p.id_categoria = ").append(categoria.getIdCategoria()).append( " AND p.estado_producto = TRUE");
+            Query query;
+            query = getEntityManager().createNativeQuery(sql.toString(), Producto.class);
+            resultado = query.getResultList();
+            if (resultado != null && !resultado.isEmpty()) {
+                return resultado;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+     
+     
     
     
 }
