@@ -34,16 +34,16 @@ import todo1.inventario.utilitarios.Utilitarios;
 @ManagedBean
 @ViewScoped
 public class kardexControlador extends Utilitarios {
-    
+
     @EJB
     private CategoriaServicio categoriaServicio;
-    
+
     @EJB
     private ProductoServicio productoServicio;
-    
+
     @EJB
     private MovimientoServicio movimientoServicio;
-    
+
     private Categoria categoria;
     private Integer idProducto;
     private List<Categoria> listaCategorias;
@@ -53,15 +53,18 @@ public class kardexControlador extends Utilitarios {
     private Date hasta;
     private BigDecimal acumulado;
     private Producto producto;
-    
+
     @PostConstruct
     public void inicio() {
         setListaCategorias(categoriaServicio.obtenerCategoriasActivas());
+        setListaKardex(null);
+        setIdProducto(null);
+        setCategoria(null);
         setDesde(null);
         setHasta(null);
-        
+
     }
-    
+
     public void procesarKardex() {
         try {
             List<DetalleKardexDto> listaDetalleKardex = movimientoServicio.obtenerListaMovimientosKardex(idProducto);
@@ -74,38 +77,48 @@ public class kardexControlador extends Utilitarios {
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo generar el kardex."));
         }
-        
+
     }
-    
+
     public void obtenerKardex(List<DetalleKardexDto> listaDetalleKardex) {
-        BigDecimal valorPromedio = new BigDecimal("0.00");
-        for (DetalleKardexDto dtk : listaDetalleKardex) {
-            KardexDto kardexDto = new KardexDto();
-            kardexDto.setFecha_transaccion(dtk.getFecha_transaccion());
-            kardexDto.setDetalle(dtk.getDescripcion() + " " + dtk.getId_transaccion());
-            if (dtk.getId_operacion() == 1) {
-                kardexDto.setCantidadEntrada(dtk.getCantidad());
-                kardexDto.setValorUnitarioEntrada(dtk.getValor_unitario());
-                kardexDto.setValorTotalEntrada(dtk.getValor_total());
-                acumulado = acumulado.add(dtk.getValor_total());
-            } else {
-                kardexDto.setCantidadSalida(dtk.getCantidad());
-                kardexDto.setValorUnitarioSalida(dtk.getValor_unitario());
-                kardexDto.setValorTotalSalida(dtk.getValor_total());
-                acumulado = acumulado.subtract(dtk.getValor_total());
+        try {
+            BigDecimal valorPromedio = new BigDecimal("0.00");
+            for (DetalleKardexDto dtk : listaDetalleKardex) {
+                KardexDto kardexDto = new KardexDto();
+                kardexDto.setFecha_transaccion(dtk.getFecha_transaccion());
+                kardexDto.setDetalle(dtk.getDescripcion() + " cod_trans " + dtk.getId_transaccion());
+                if (dtk.getId_operacion() == 1) {
+                    kardexDto.setCantidadEntrada(dtk.getCantidad());
+                    kardexDto.setValorUnitarioEntrada(dtk.getValor_unitario());
+                    kardexDto.setValorTotalEntrada(dtk.getValor_total());
+                    acumulado = acumulado.add(dtk.getValor_total());
+                } else {
+                    kardexDto.setCantidadSalida(dtk.getCantidad());
+                    kardexDto.setValorUnitarioSalida(dtk.getValor_unitario());
+                    kardexDto.setValorTotalSalida(dtk.getValor_total());
+                    acumulado = acumulado.subtract(dtk.getValor_total());
+                }
+                kardexDto.setCantidadExistencia(dtk.getStock_actual());
+                kardexDto.setValorTotalExistencia(acumulado);
+                valorPromedio = acumulado.divide(new BigDecimal(kardexDto.getCantidadExistencia()), 2, RoundingMode.HALF_UP);
+                kardexDto.setValorUnitarioExistencia(valorPromedio);
+                listaKardex.add(kardexDto);
             }
-            kardexDto.setCantidadExistencia(dtk.getStock_actual());
-            kardexDto.setValorTotalExistencia(acumulado);
-            valorPromedio = acumulado.divide(new BigDecimal(kardexDto.getCantidadExistencia()),2, RoundingMode.HALF_UP);
-            kardexDto.setValorUnitarioExistencia(valorPromedio);
-            listaKardex.add(kardexDto);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+
     }
-    
+
     public void listarProductos() {
-        setListaProductos(productoServicio.obtenerListaProductosActivosPorCategoria(getCategoria()));
+        try {
+            setListaProductos(productoServicio.obtenerListaProductosActivosPorCategoria(getCategoria()));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
-    
+
     public void limpiarKardex() {
         inicio();
         RequestContext.getCurrentInstance().reset("frmKardex");
@@ -194,7 +207,6 @@ public class kardexControlador extends Utilitarios {
     public void setHasta(Date hasta) {
         this.hasta = hasta;
     }
-    
 
     /**
      * @return the listaKardex
@@ -238,8 +250,4 @@ public class kardexControlador extends Utilitarios {
         this.producto = producto;
     }
 
-    
-
-  
-    
 }

@@ -39,23 +39,23 @@
                                              process="frmProducto" update="frmProducto" rendered="#{!productoControlador.botonActualizarVisible}"></p:commandButton>
                                              <p:commandButton value="Actualizar" icon="ui-icon-pencil" actionListener="#{productoControlador.actualizarProducto()}" process="frmProducto" update="frmProducto"
                                              rendered="#{productoControlador.botonActualizarVisible}"></p:commandButton>
-                                             <p:commandButton value="Limpiar" icon="ui-icon-refresh" actionListener="#{productoControlador.limpiarProducto()}" process="frmProducto" update="frmProducto"></p:commandButton>
+                                             <p:commandButton value="Limpiar" icon="ui-icon-refresh" actionListener="#{productoControlador.limpiarProducto()}" process="@this" update="frmProducto"></p:commandButton>
                         </center>
 
                     </p:panel>
 
-                    <p:panel header="Lista de Categorías registradas" >
+                    <p:panel header="Lista de Productos registrados" >
                         <p:dataTable var="pro" value="#{productoControlador.listaProductosActivos}"
                                      rows="10"
                                      paginator="true"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     emptyMessage="No existen datos para mostrar">
-                            <p:column headerText="Id">
-                                <h:outputText value="#{pro.idProducto}" />
+                                     emptyMessage="No existen datos para mostrar" rowIndexVar="index">
+                            <p:column headerText="...">
+                                <h:outputText value="#{index+1}"/>
                             </p:column>
 
                              <p:column headerText="Categoría:">
-                                <h:outputText value="#{pro.idCategoria.descripcionCategoria}" />
+                                 <h:outputText value="#{pro.idCategoria.nombr}" />
                             </p:column>
                             
                             

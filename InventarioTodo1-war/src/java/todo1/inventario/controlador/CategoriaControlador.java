@@ -5,6 +5,7 @@
  */
 package todo1.inventario.controlador;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -41,18 +42,21 @@ public class CategoriaControlador extends Utilitarios {
     }
 
     public void guardarCategoria() {
-
-        if (categoriaServicio.buscarCategoriaPorNombre(categoria.getNombr()) == null) {
-            categoria.setEstadpCategoria(true);
-            Boolean categoriaExiste = categoriaServicio.guardarCategoria(categoria);
-            if (categoriaExiste) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
+        try {
+            if (categoriaServicio.buscarCategoriaPorNombre(categoria.getNombr()) == null) {
+                categoria.setEstadpCategoria(true);
+                Boolean categoriaExiste = categoriaServicio.guardarCategoria(categoria);
+                if (categoriaExiste) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido almacenado."));
+                }
+                inicio();
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido almacenado."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La categoría ingresada ya existe."));
             }
-            inicio();
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La categoría ingresada ya existe."));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
     }
@@ -68,25 +72,31 @@ public class CategoriaControlador extends Utilitarios {
     }
 
     public void actualizarCategoria() {
+
         setBotonActualizarVisible((Boolean) false);
-        Boolean categoriaExiste = categoriaServicio.guardarCategoria(categoria);
-        if (categoriaExiste) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+        if (categoria != null) {
+            Boolean categoriaExiste = categoriaServicio.guardarCategoria(categoria);
+            if (categoriaExiste) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+            }
+            inicio();
         }
-        inicio();
+
     }
 
     public void eliminarCategoria(Categoria cat) {
-        cat.setEstadpCategoria(false);
-        Boolean categoriaExiste = categoriaServicio.guardarCategoria(cat);
-        if (categoriaExiste) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido eliminado exitosamente."));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido eliminado."));
+        if (cat != null) {
+            cat.setEstadpCategoria(false);
+            Boolean categoriaExiste = categoriaServicio.guardarCategoria(cat);
+            if (categoriaExiste) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido eliminado exitosamente."));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido eliminado."));
+            }
+            inicio();
         }
-        inicio();
 
     }
 

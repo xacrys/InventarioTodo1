@@ -35,20 +35,12 @@
                                 <f:selectItems value="#{kardexControlador.listaProductos}" var="varPro" itemLabel="#{varPro.description}" itemValue="#{varPro.value}" />
                             </p:selectOneMenu>
 
-                            <p:outputLabel>Desde:</p:outputLabel>
-                            <p:calendar id="cdDesde" value="#{kardexControlador.desde}" maxdate="today">
-                                <p:ajax event="dateSelect"  update="cdHasta" />
-                            </p:calendar>
-
-                            <p:outputLabel > Hasta:</p:outputLabel>
-                            <p:calendar id="cdHasta" value="#{kardexControlador.hasta}" mindate="#{kardexControlador.desde}" maxdate="today">
-                                <p:ajax event="dateSelect"  update="cdDesde" />
-                            </p:calendar>
+                           
 
                         </p:panelGrid>
                         <center>
                             <p:commandButton value="Procesar" icon="ui-icon-disk"  
-                                             process="frmKardex" update="frmKardex:dtKardex" 
+                                             process="frmKardex" update="frmKardex" 
                                              actionListener="#{kardexControlador.procesarKardex}"></p:commandButton>
                             <p:commandButton value="Limpiar" icon="ui-icon-refresh"  process="@this" update="frmKardex" actionListener="#{kardexControlador.limpiarKardex}"></p:commandButton>
                         </center>
@@ -57,9 +49,9 @@
 
 
 
-                    <p:panel header="DETALLE DE KARDEX - Distribución Porcentual" >
+                    <p:panel id="pnDetalle" header="DETALLE DE KARDEX - Promedio Ponderado" rendered="#{kardexControlador.listaKardex!=null}">
                         <p:dataTable id="dtKardex" var="kar" value="#{kardexControlador.listaKardex}"
-                                     emptyMessage="No existen datos para mostrar">
+                                     emptyMessage="No existen datos para mostrar" >
                             <f:facet name="header">
                                 Kardex de #{kardexControlador.producto.nombreProducto}
                             </f:facet>

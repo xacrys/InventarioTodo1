@@ -60,13 +60,13 @@ public class CompraControlador extends Utilitarios {
 
     @EJB
     private VendedorServicio vendedorServicio;
-    
+
     @EJB
     private DetalleTransaccionServicio detalleTransaccionServicio;
-    
+
     @EJB
     private TransaccionServicio transaccionServicio;
-    
+
     @EJB
     private MovimientoServicio movimientoServicio;
 
@@ -105,48 +105,56 @@ public class CompraControlador extends Utilitarios {
     }
 
     public void cambiarModelo() {
-        setBanderaPanelRucVisible(idTipoDocumento != 1);
-        setMascaraNumDocumento(idTipoDocumento != 1 ? "9999999999999" : "9999999999");
-        setUsuario(new Usuario());
-        //setBotonActualizarVisible(false);
+        try {
+            setBanderaPanelRucVisible(idTipoDocumento != 1);
+            setMascaraNumDocumento(idTipoDocumento != 1 ? "9999999999999" : "9999999999");
+            setUsuario(new Usuario());
+            //setBotonActualizarVisible(false);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public void buscarCliente() {
-        if (usuario.getNumDocUsuario() != null && (usuario.getNumDocUsuario().length() == 10 || usuario.getNumDocUsuario().length() == 13)) {
-            Usuario usuarioExiste = usuarioServicio.buscarUsuarioCliente(usuario.getNumDocUsuario(), 2);
-            if (usuarioExiste != null) {
-                usuario = usuarioExiste;
-                setBotonActualizarVisible(true);
-                setCategoria(null);
-                setIdProducto(null);
-                setCantidad(0);
-                setSubtotal(new BigDecimal("0.00"));
-                setTotal(new BigDecimal("0.00"));
-                setIva(new BigDecimal("0.00"));
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El proveedor no existe debe registrarlo."));
-            }
+        if (usuario != null) {
+            if (usuario.getNumDocUsuario() != null && (usuario.getNumDocUsuario().length() == 10 || usuario.getNumDocUsuario().length() == 13)) {
+                Usuario usuarioExiste = usuarioServicio.buscarUsuarioCliente(usuario.getNumDocUsuario(), 2);
+                if (usuarioExiste != null) {
+                    usuario = usuarioExiste;
+                    setBotonActualizarVisible(true);
+                    setCategoria(null);
+                    setIdProducto(null);
+                    setCantidad(0);
+                    setSubtotal(new BigDecimal("0.00"));
+                    setTotal(new BigDecimal("0.00"));
+                    setIva(new BigDecimal("0.00"));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El proveedor no existe debe registrarlo."));
+                }
 
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Verifique la cantidad de dígitos del número de documento."));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Verifique la cantidad de dígitos del número de documento."));
+            }
         }
+
     }
 
     public void guardarCompra() {
         try {
-            Operacion operacion = operacionServicio.obtenerOperacionPorId(GlobalParametros.COD_COMPRA);
+            Operacion operacionRealizada = operacionServicio.obtenerOperacionPorId(GlobalParametros.COD_COMPRA);
             Vendedor vendedor = vendedorServicio.obtenerVendedorPorCedula(GlobalParametros.CED_VENDEDOR);
-            if (operacion != null && vendedor != null && usuario != null && !listaDetalles.isEmpty()) {
+            if (operacionRealizada != null && vendedor != null && usuario != null && !listaDetalles.isEmpty()) {
                 Transaccion transaccion = new Transaccion();
                 transaccion.setFechaTransaccion(new Date());
-                transaccion.setIdOperacion(operacion);
+                transaccion.setIdOperacion(operacionRealizada);
                 transaccion.setIdUsuario(usuario);
                 transaccion.setIdVendedor(vendedor);
                 transaccion.setSubtotal(subtotal);
                 transaccion.setImpuesto(iva);
                 transaccion.setTotal(total);
                 transaccion = transaccionServicio.guardarTransaccion(transaccion);
-                for(DetalleProductoDto detalleProducto : listaDetalles){
+                for (DetalleProductoDto detalleProducto : listaDetalles) {
                     DetalleTransaccion detalleTransaccion = new DetalleTransaccion();
                     detalleTransaccion.setIdTransaccion(transaccion);
                     detalleTransaccion.setCantidadDetalleTransaccion(detalleProducto.getCantidad());
@@ -159,15 +167,15 @@ public class CompraControlador extends Utilitarios {
                     movimiento.setIdDetalleTransaccion(detalleTransaccion);
                     movimiento.setIdProducto(detalleProducto.getProducto());
                     movimiento.setStockAnterior(detalleProducto.getProducto().getStock());
-                    movimiento.setStockActual(detalleProducto.getProducto().getStock()+detalleProducto.getCantidad());
+                    movimiento.setStockActual(detalleProducto.getProducto().getStock() + detalleProducto.getCantidad());
                     movimiento.setValorUnitario(detalleProducto.getPreciouProducto());
                     movimiento.setValorTotal(detalleProducto.getMonto());
                     movimientoServicio.guardarMovimiento(movimiento);
-                    detalleProducto.getProducto().setStock(detalleProducto.getProducto().getStock()+detalleProducto.getCantidad());
+                    detalleProducto.getProducto().setStock(detalleProducto.getProducto().getStock() + detalleProducto.getCantidad());
                     productoServicio.guardarProducto(detalleProducto.getProducto());
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Se ha realizado la compra exitosamente."));
-                    
+
                 }
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Se ha realizado la compra exitosamente."));
                 limpiarCompra();
             }
 
@@ -178,42 +186,61 @@ public class CompraControlador extends Utilitarios {
     }
 
     public void obtenerMaximo() {
-        producto = productoServicio.buscarProductoPorId(idProducto);
-        maximoStock = producto.getStock();
+        try {
+            producto = productoServicio.buscarProductoPorId(idProducto);
+            maximoStock = producto.getStock();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public void agregarDetalle() {
-        if (getCantidad() != 0) {
-            BigDecimal monto = producto.getPreciocProducto().multiply(new BigDecimal(cantidad));
-            DetalleProductoDto detalle = new DetalleProductoDto(producto, producto.getPreciocProducto(), cantidad, monto);
-            if (!verificarExistencia(producto.getIdProducto(), listaDetalles)) {
-                listaDetalles.add(detalle);
-                setCategoria(null);
-                setIdProducto(null);
-                setCantidad(0);
-                subtotal = subtotal.add(monto);
-                iva = (subtotal.multiply(new BigDecimal(GlobalParametros.IVA))).divide(new BigDecimal("100.00"));
-                total = subtotal.add(iva);
+        try {
+            if (getCantidad() != 0) {
+                BigDecimal monto = producto.getPreciocProducto().multiply(new BigDecimal(cantidad));
+                DetalleProductoDto detalle = new DetalleProductoDto(producto, producto.getPreciocProducto(), cantidad, monto);
+                if (!verificarExistencia(producto.getIdProducto(), listaDetalles)) {
+                    listaDetalles.add(detalle);
+                    setCategoria(null);
+                    setIdProducto(null);
+                    setCantidad(0);
+                    subtotal = subtotal.add(monto);
+                    iva = (subtotal.multiply(new BigDecimal(GlobalParametros.IVA))).divide(new BigDecimal("100.00"));
+                    total = subtotal.add(iva);
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El producto ya ha sido ingresado."));
+                }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El producto ya ha sido ingresado."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad no puede ser cero."));
             }
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "La cantidad no puede ser cero."));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
     }
 
     public Boolean verificarExistencia(Integer idProducto, List<DetalleProductoDto> listaProductos) {
-        for (DetalleProductoDto det : listaProductos) {
-            if (Objects.equals(det.getProducto().getIdProducto(), idProducto)) {
-                return true;
+        try {
+            for (DetalleProductoDto det : listaProductos) {
+                if (Objects.equals(det.getProducto().getIdProducto(), idProducto)) {
+                    return true;
+                }
             }
+            return false;
+        } catch (Exception e) {
+            return false;
         }
-        return false;
+
     }
 
     public void listarProductos() {
-        setListaProductos(productoServicio.obtenerListaProductosActivosPorCategoria(categoria));
+        try {
+            setListaProductos(productoServicio.obtenerListaProductosActivosPorCategoria(categoria));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public void limpiarCompra() {
@@ -222,17 +249,24 @@ public class CompraControlador extends Utilitarios {
     }
 
     public void eliminarProducto(DetalleProductoDto detalleProducto) {
-        listaDetalles.remove(detalleProducto);
+        if (detalleProducto != null) {
+            listaDetalles.remove(detalleProducto);
+        }
     }
 
     public void actualizarCliente() {
-        Usuario clienteGuardado = usuarioServicio.guardarUsuario(getUsuario());
-        if (clienteGuardado != null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+        try {
+            Usuario clienteGuardado = usuarioServicio.guardarUsuario(getUsuario());
+            if (clienteGuardado != null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+            }
+            inicio();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        inicio();
+
     }
 
     /**

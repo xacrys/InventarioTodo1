@@ -56,46 +56,59 @@ public class ClienteControlador extends Utilitarios {
     }
 
     public void cambiarModelo() {
-        setBanderaPanelRucVisible(idTipoDocumento != 1);
-        setMascaraNumDocumento(idTipoDocumento != 1 ? "9999999999999" : "9999999999");
-        setUsuario(new Usuario());
-        setBotonActualizarVisible(false);
-        setCamposHabilitados(false);
+        try {
+            setBanderaPanelRucVisible(idTipoDocumento != 1);
+            setMascaraNumDocumento(idTipoDocumento != 1 ? "9999999999999" : "9999999999");
+            setUsuario(new Usuario());
+            setBotonActualizarVisible(false);
+            setCamposHabilitados(false);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public void buscarCliente() {
-        if (usuario.getNumDocUsuario() != null && (usuario.getNumDocUsuario().length() == 10 || usuario.getNumDocUsuario().length() == 13)) {
-            Usuario usuarioExiste = usuarioServicio.buscarUsuarioCliente(usuario.getNumDocUsuario(), 1);
-            if (usuarioExiste != null) {
-                usuario = usuarioExiste;
-                setBotonActualizarVisible(true);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El cliente ya existe puede modificarlo."));
+        try {
+            if (usuario.getNumDocUsuario() != null && (usuario.getNumDocUsuario().length() == 10 || usuario.getNumDocUsuario().length() == 13)) {
+                Usuario usuarioExiste = usuarioServicio.buscarUsuarioCliente(usuario.getNumDocUsuario(), 1);
+                if (usuarioExiste != null) {
+                    usuario = usuarioExiste;
+                    setBotonActualizarVisible(true);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El cliente ya existe puede modificarlo."));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El cliente no existe puede registralo."));
+                }
+                setCamposHabilitados(true);
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El cliente no existe puede registralo."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Verifique la cantidad de dìgitos del número de documento."));
             }
-            setCamposHabilitados(true);
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Verifique la cantidad de dìgitos del número de documento."));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+
     }
 
     public void guardarCliente() {
         try {
-            usuario.setEstadoUsuario(true);
-            usuario.setTipoDocUsuario(idTipoDocumento);
-            Usuario clienteExiste = usuarioServicio.obtenerUsuarioPorCedula(usuario.getNumDocUsuario());
-            Usuario clienteGuardado = null;
-            if (clienteExiste != null) {
-               getUsuario().setIdUsuario(clienteExiste.getIdUsuario());
+            if (usuario != null) {
+                usuario.setEstadoUsuario(true);
+                usuario.setTipoDocUsuario(idTipoDocumento);
+                Usuario clienteExiste = usuarioServicio.obtenerUsuarioPorCedula(usuario.getNumDocUsuario());
+                Usuario clienteGuardado = null;
+                if (clienteExiste != null) {
+                    getUsuario().setIdUsuario(clienteExiste.getIdUsuario());
+                }
+                clienteGuardado = usuarioServicio.guardarUsuario(getUsuario());
+                TipoUsuario tipoUsuario = tipoUsuarioServicio.obtenerTipoUsuarioPorId(1);
+                UsuarioTipoUsuario usuarioTipoUsuario = new UsuarioTipoUsuario();
+                usuarioTipoUsuario.setIdUsuario(clienteGuardado);
+                usuarioTipoUsuario.setIdTipoUsuario(tipoUsuario);
+                usuarioTipoUsuarioServicio.guardarUsuarioTipoUsuario(usuarioTipoUsuario);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
+                inicio();
             }
-            clienteGuardado = usuarioServicio.guardarUsuario(getUsuario());
-            TipoUsuario tipoUsuario = tipoUsuarioServicio.obtenerTipoUsuarioPorId(1);
-            UsuarioTipoUsuario usuarioTipoUsuario = new UsuarioTipoUsuario();
-            usuarioTipoUsuario.setIdUsuario(clienteGuardado);
-            usuarioTipoUsuario.setIdTipoUsuario(tipoUsuario);
-            usuarioTipoUsuarioServicio.guardarUsuarioTipoUsuario(usuarioTipoUsuario);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
-            inicio();
+
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido registrado."));
         }
@@ -108,13 +121,18 @@ public class ClienteControlador extends Utilitarios {
     }
 
     public void actualizarCliente() {
-        Usuario clienteGuardado = usuarioServicio.guardarUsuario(getUsuario());
-        if (clienteGuardado != null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+        try {
+            Usuario clienteGuardado = usuarioServicio.guardarUsuario(getUsuario());
+            if (clienteGuardado != null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+            }
+            inicio();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        inicio();
+
     }
 
 //    public void eliminarProducto(Producto pro) {

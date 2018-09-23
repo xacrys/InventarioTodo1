@@ -170,8 +170,9 @@ public class VentaControlador extends Utilitarios {
                     movimientoServicio.guardarMovimiento(movimiento);
                     detalleProducto.getProducto().setStock(detalleProducto.getProducto().getStock()-detalleProducto.getCantidad());
                     productoServicio.guardarProducto(detalleProducto.getProducto());
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La venta ha sido realizada exitosamente."));
+                    
                 }
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La venta ha sido realizada exitosamente."));
                 limpiarVenta();
                 
             }

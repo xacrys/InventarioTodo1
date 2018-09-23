@@ -30,11 +30,10 @@ public class ProductoControlador extends Utilitarios {
 
     @EJB
     private CategoriaServicio categoriaServicio;
-    
+
     @EJB
     private ProductoServicio productoServicio;
 
-    
     private List<SelectItem> listaCategorias;
     private List<Producto> listaProductosActivos;
     private Producto producto;
@@ -54,20 +53,23 @@ public class ProductoControlador extends Utilitarios {
     }
 
     public void guardarProducto() {
-
-        if (productoServicio.buscarProductoPorNombre(getProducto().getNombreProducto()) == null) {
-            getProducto().setIdCategoria(categoriaServicio.buscarCategoriaPorId(idCategoria));
-            getProducto().setStock(0);
-            getProducto().setEstadoProducto(true);
-            Boolean productoExiste = productoServicio.guardarProducto(getProducto());
-            if (productoExiste) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
+        try {
+            if (productoServicio.buscarProductoPorNombre(getProducto().getNombreProducto()) == null) {
+                getProducto().setIdCategoria(categoriaServicio.buscarCategoriaPorId(idCategoria));
+                getProducto().setStock(0);
+                getProducto().setEstadoProducto(true);
+                Boolean productoExiste = productoServicio.guardarProducto(getProducto());
+                if (productoExiste) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido almacenado."));
+                }
+                inicio();
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido almacenado."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El producto ingresada ya existe."));
             }
-            inicio();
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El producto ingresada ya existe."));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
 
     }
@@ -78,35 +80,44 @@ public class ProductoControlador extends Utilitarios {
     }
 
     public void habilitarActualizacion(Producto prod) {
-        setProducto(prod);
-        setBotonActualizarVisible((Boolean) true);
+        if (prod != null) {
+            setProducto(prod);
+            setBotonActualizarVisible((Boolean) true);
+            setIdCategoria(prod.getIdCategoria().getIdCategoria());
+        }
+
     }
 
     public void actualizarProducto() {
-        setBotonActualizarVisible((Boolean) false);
-        getProducto().setIdCategoria(categoriaServicio.buscarCategoriaPorId(idCategoria));
-        Boolean productoExiste = productoServicio.guardarProducto(getProducto());
-        if (productoExiste) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+        try {
+            setBotonActualizarVisible((Boolean) false);
+            getProducto().setIdCategoria(categoriaServicio.buscarCategoriaPorId(idCategoria));
+            Boolean productoExiste = productoServicio.guardarProducto(getProducto());
+            if (productoExiste) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+            }
+            inicio();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        inicio();
+
     }
 
     public void eliminarProducto(Producto pro) {
-        pro.setEstadoProducto(false);
-        Boolean productoExiste = productoServicio.guardarProducto(pro);
-        if (productoExiste) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido eliminado exitosamente."));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido eliminado."));
+        if (pro != null) {
+            pro.setEstadoProducto(false);
+            Boolean productoExiste = productoServicio.guardarProducto(pro);
+            if (productoExiste) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido eliminado exitosamente."));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido eliminado."));
+            }
+            inicio();
         }
-        inicio();
 
     }
-
-    
 
     /**
      * @return the botonActualizarVisible

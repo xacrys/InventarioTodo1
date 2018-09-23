@@ -52,38 +52,46 @@ public class ProveedorControlador extends Utilitarios {
     }
 
     public void buscarProveedor() {
-        if (usuario.getNumDocUsuario() != null && usuario.getNumDocUsuario().length() == 13) {
-            Usuario usuarioExiste = usuarioServicio.buscarUsuarioCliente(usuario.getNumDocUsuario(), 2);
-            if (usuarioExiste != null) {
-                usuario = usuarioExiste;
-                setBotonActualizarVisible(true);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El proveedor ya existe puede modificarlo."));
+        try {
+            if (usuario.getNumDocUsuario() != null && usuario.getNumDocUsuario().length() == 13) {
+                Usuario usuarioExiste = usuarioServicio.buscarUsuarioCliente(usuario.getNumDocUsuario(), 2);
+                if (usuarioExiste != null) {
+                    usuario = usuarioExiste;
+                    setBotonActualizarVisible(true);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El proveedor ya existe puede modificarlo."));
+                } else {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El proveedor no existe puede registralo."));
+                }
+                setCamposHabilitados(true);
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El proveedor no existe puede registralo."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Verifique la cantidad de dìgitos del número de documento."));
             }
-            setCamposHabilitados(true);
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Verifique la cantidad de dìgitos del número de documento."));
+        } catch (Exception e) {
+            e.getMessage();
         }
+
     }
 
     public void guardarProveedor() {
         try {
-            usuario.setEstadoUsuario(true);
-            usuario.setTipoDocUsuario(getIdTipoDocumento());
-            Usuario proveedorExiste = usuarioServicio.obtenerUsuarioPorCedula(usuario.getNumDocUsuario());
-            Usuario proveedorGuardado = null;
-            if (proveedorExiste != null) {
-               getUsuario().setIdUsuario(proveedorExiste.getIdUsuario());
+            if (usuario != null) {
+                usuario.setEstadoUsuario(true);
+                usuario.setTipoDocUsuario(getIdTipoDocumento());
+                Usuario proveedorExiste = usuarioServicio.obtenerUsuarioPorCedula(usuario.getNumDocUsuario());
+                Usuario proveedorGuardado = null;
+                if (proveedorExiste != null) {
+                    getUsuario().setIdUsuario(proveedorExiste.getIdUsuario());
+                }
+                proveedorGuardado = usuarioServicio.guardarUsuario(getUsuario());
+                TipoUsuario tipoUsuario = tipoUsuarioServicio.obtenerTipoUsuarioPorId(2);
+                UsuarioTipoUsuario usuarioTipoUsuario = new UsuarioTipoUsuario();
+                usuarioTipoUsuario.setIdUsuario(proveedorGuardado == null ? proveedorExiste : proveedorGuardado);
+                usuarioTipoUsuario.setIdTipoUsuario(tipoUsuario);
+                usuarioTipoUsuarioServicio.guardarUsuarioTipoUsuario(usuarioTipoUsuario);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
+                inicio();
             }
-            proveedorGuardado = usuarioServicio.guardarUsuario(getUsuario());
-            TipoUsuario tipoUsuario = tipoUsuarioServicio.obtenerTipoUsuarioPorId(2);
-            UsuarioTipoUsuario usuarioTipoUsuario = new UsuarioTipoUsuario();
-            usuarioTipoUsuario.setIdUsuario(proveedorGuardado == null ? proveedorExiste : proveedorGuardado);
-            usuarioTipoUsuario.setIdTipoUsuario(tipoUsuario);
-            usuarioTipoUsuarioServicio.guardarUsuarioTipoUsuario(usuarioTipoUsuario);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido almacenado exitosamente."));
-            inicio();
+
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido registrado."));
         }
@@ -96,13 +104,18 @@ public class ProveedorControlador extends Utilitarios {
     }
 
     public void actualizarProveedor() {
-        Usuario proveedorGuardado = usuarioServicio.guardarUsuario(getUsuario());
-        if (proveedorGuardado != null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+        try {
+            Usuario proveedorGuardado = usuarioServicio.guardarUsuario(getUsuario());
+            if (proveedorGuardado != null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El registro ha sido actualizado exitosamente."));
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El registro no ha sido actualizado."));
+            }
+            inicio();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        inicio();
+
     }
 
 //    public void eliminarProducto(Producto pro) {
