@@ -6,7 +6,6 @@
 package todo1.inventario.controlador;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,10 +24,8 @@ import todo1.inventario.modelo.DetalleTransaccion;
 import todo1.inventario.modelo.Movimiento;
 import todo1.inventario.modelo.Operacion;
 import todo1.inventario.modelo.Producto;
-import todo1.inventario.modelo.TipoUsuario;
 import todo1.inventario.modelo.Transaccion;
 import todo1.inventario.modelo.Usuario;
-import todo1.inventario.modelo.UsuarioTipoUsuario;
 import todo1.inventario.modelo.Vendedor;
 import todo1.inventario.parametros.GlobalParametros;
 import todo1.inventario.servicio.CategoriaServicio;
@@ -36,10 +33,8 @@ import todo1.inventario.servicio.DetalleTransaccionServicio;
 import todo1.inventario.servicio.MovimientoServicio;
 import todo1.inventario.servicio.OperacionServicio;
 import todo1.inventario.servicio.ProductoServicio;
-import todo1.inventario.servicio.TipoUsuarioServicio;
 import todo1.inventario.servicio.TransaccionServicio;
 import todo1.inventario.servicio.UsuarioServicio;
-import todo1.inventario.servicio.UsuarioTipoUsuarioServicio;
 import todo1.inventario.servicio.VendedorServicio;
 import todo1.inventario.utilitarios.Utilitarios;
 
@@ -49,7 +44,7 @@ import todo1.inventario.utilitarios.Utilitarios;
  */
 @ManagedBean
 @ViewScoped
-public class VentaControlador extends Utilitarios {
+public class CompraControlador extends Utilitarios {
 
     @EJB
     private UsuarioServicio usuarioServicio;
@@ -118,7 +113,7 @@ public class VentaControlador extends Utilitarios {
 
     public void buscarCliente() {
         if (usuario.getNumDocUsuario() != null && (usuario.getNumDocUsuario().length() == 10 || usuario.getNumDocUsuario().length() == 13)) {
-            Usuario usuarioExiste = usuarioServicio.buscarUsuarioCliente(usuario.getNumDocUsuario(), 1);
+            Usuario usuarioExiste = usuarioServicio.buscarUsuarioCliente(usuario.getNumDocUsuario(), 2);
             if (usuarioExiste != null) {
                 usuario = usuarioExiste;
                 setBotonActualizarVisible(true);
@@ -129,17 +124,17 @@ public class VentaControlador extends Utilitarios {
                 setTotal(new BigDecimal("0.00"));
                 setIva(new BigDecimal("0.00"));
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El cliente no existe debe registrarlo."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "El proveedor no existe debe registrarlo."));
             }
 
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Verifique la cantidad de dìgitos del número de documento."));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Verifique la cantidad de dígitos del número de documento."));
         }
     }
 
-    public void guardarVenta() {
+    public void guardarCompra() {
         try {
-            Operacion operacion = operacionServicio.obtenerOperacionPorId(GlobalParametros.COD_VENTA);
+            Operacion operacion = operacionServicio.obtenerOperacionPorId(GlobalParametros.COD_COMPRA);
             Vendedor vendedor = vendedorServicio.obtenerVendedorPorCedula(GlobalParametros.CED_VENDEDOR);
             if (operacion != null && vendedor != null && usuario != null && !listaDetalles.isEmpty()) {
                 Transaccion transaccion = new Transaccion();
@@ -164,20 +159,20 @@ public class VentaControlador extends Utilitarios {
                     movimiento.setIdDetalleTransaccion(detalleTransaccion);
                     movimiento.setIdProducto(detalleProducto.getProducto());
                     movimiento.setStockAnterior(detalleProducto.getProducto().getStock());
-                    movimiento.setStockActual(detalleProducto.getProducto().getStock()-detalleProducto.getCantidad());
+                    movimiento.setStockActual(detalleProducto.getProducto().getStock()+detalleProducto.getCantidad());
                     movimiento.setValorUnitario(detalleProducto.getPreciouProducto());
                     movimiento.setValorTotal(detalleProducto.getMonto());
                     movimientoServicio.guardarMovimiento(movimiento);
-                    detalleProducto.getProducto().setStock(detalleProducto.getProducto().getStock()-detalleProducto.getCantidad());
+                    detalleProducto.getProducto().setStock(detalleProducto.getProducto().getStock()+detalleProducto.getCantidad());
                     productoServicio.guardarProducto(detalleProducto.getProducto());
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "La venta ha sido realizada exitosamente."));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Se ha realizado la compra exitosamente."));
+                    
                 }
-                limpiarVenta();
-                
+                limpiarCompra();
             }
 
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo almacenar la venta."));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "No se pudo almacenar la compra."));
         }
 
     }
@@ -189,8 +184,8 @@ public class VentaControlador extends Utilitarios {
 
     public void agregarDetalle() {
         if (getCantidad() != 0) {
-            BigDecimal monto = producto.getPreciouProducto().multiply(new BigDecimal(cantidad));
-            DetalleProductoDto detalle = new DetalleProductoDto(producto, producto.getPreciouProducto(), cantidad, monto);
+            BigDecimal monto = producto.getPreciocProducto().multiply(new BigDecimal(cantidad));
+            DetalleProductoDto detalle = new DetalleProductoDto(producto, producto.getPreciocProducto(), cantidad, monto);
             if (!verificarExistencia(producto.getIdProducto(), listaDetalles)) {
                 listaDetalles.add(detalle);
                 setCategoria(null);
@@ -221,9 +216,9 @@ public class VentaControlador extends Utilitarios {
         setListaProductos(productoServicio.obtenerListaProductosActivosPorCategoria(categoria));
     }
 
-    public void limpiarVenta() {
+    public void limpiarCompra() {
         inicio();
-        RequestContext.getCurrentInstance().reset("frmVenta");
+        RequestContext.getCurrentInstance().reset("frmCompra");
     }
 
     public void eliminarProducto(DetalleProductoDto detalleProducto) {

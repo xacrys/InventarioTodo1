@@ -20,3 +20,7 @@
 .sinEspacios.ui-panelgrid .ui-panelgrid-cell {
     border: none;
 }
+
+.alineadoDer{
+    text-align: right;
+}

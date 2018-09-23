@@ -13,31 +13,21 @@
                 <p:messages id="messages" showDetail="true" closable="true">
                     <p:autoUpdate />
                 </p:messages>
-                <h:form id="frmVenta">
-                    <p:panel header="VENTA" >
+                <h:form id="frmCompra">
+                    <p:panel header="ORDEN DE COMPRA" >
                         <p:panelGrid id="pgCliente" columns="2" layout="grid"> 
 
-                            <p:panelGrid styleClass="sinEspacios">  
-                                <p:row>
-                                    <p:column>
-                                        <p:selectOneRadio  value="#{ventaControlador.idTipoDocumento}" style="margin: 0px;">
-                                            <f:selectItem itemLabel="Cedula" itemValue="1" />
-                                            <f:selectItem itemLabel="RUC" itemValue="2" />
-                                            <p:ajax update="frmVenta" event="valueChange" listener="#{ventaControlador.cambiarModelo}"/>
-                                        </p:selectOneRadio>
-                                    </p:column>
-                                </p:row>
-                            </p:panelGrid>
+                            <p:outputLabel>Número de Documento:</p:outputLabel>
 
 
                             <p:panelGrid id="pgCedula" styleClass="sinEspacios">
                                 <p:row>
                                     <p:column>
-                                        <p:inputMask id="imNumDocumento" mask="#{ventaControlador.mascaraNumDocumento}"
-                                                     value="#{ventaControlador.usuario.numDocUsuario}"></p:inputMask>
+                                        <p:inputMask id="imNumDocumento" mask="9999999999999"
+                                                     value="#{compraControlador.usuario.numDocUsuario}"></p:inputMask>
                                     </p:column> 
                                     <p:column style="width: 60px;">
-                                        <p:commandButton icon="ui-icon-search" style="width: 60px" process="frmVenta:pgCedula" update="frmVenta" actionListener="#{ventaControlador.buscarCliente}"></p:commandButton>
+                                        <p:commandButton icon="ui-icon-search" style="width: 60px" process="frmCompra:pgCedula" update="frmCompra" actionListener="#{compraControlador.buscarCliente}"></p:commandButton>
                                     </p:column> 
                                 </p:row>
                             </p:panelGrid>
@@ -47,52 +37,9 @@
                         </p:panelGrid>
                     </p:panel>
 
-                    <p:panel header="CLIENTE" rendered="#{!ventaControlador.banderaPanelRucVisible}" >
-                        <p:panelGrid  columns="2" layout="grid">
-                            <p:panelGrid styleClass="sinEspacios">
-                                <p:row>
-                                    <p:column>
-                                        <p:outputLabel value="Nombre:"></p:outputLabel>
-                                    </p:column> 
-                                    <p:column>
-                                        <p:outputLabel value="#{ventaControlador.usuario.nombreUsuario}"></p:outputLabel>
-                                    </p:column> 
-                                </p:row>
-                            </p:panelGrid>
-                            <p:panelGrid styleClass="sinEspacios">
-                                <p:row>
-                                    <p:column>
-                                        <p:outputLabel value="Dirección:"></p:outputLabel>
-                                    </p:column> 
-                                    <p:column >
-                                        <p:outputLabel value="#{ventaControlador.usuario.direccionUsuario}"></p:outputLabel>
-                                    </p:column> 
-                                </p:row>
-                            </p:panelGrid>
-                            <p:panelGrid styleClass="sinEspacios">
-                                <p:row>
-                                    <p:column>
-                                        <p:outputLabel value="Correo Electrónico:"></p:outputLabel>
-                                    </p:column> 
-                                    <p:column>
-                                        <p:outputLabel value="#{ventaControlador.usuario.mailUsuario}"></p:outputLabel>
-                                    </p:column> 
-                                </p:row>
-                            </p:panelGrid>
-                            <p:panelGrid  styleClass="sinEspacios">
-                                <p:row>
-                                    <p:column>
-                                        <p:outputLabel value="Teléfono"></p:outputLabel>
-                                    </p:column> 
-                                    <p:column>
-                                        <p:outputLabel value="#{ventaControlador.usuario.telefonoUsuario}"></p:outputLabel>
-                                    </p:column> 
-                                </p:row>
-                            </p:panelGrid>
-                        </p:panelGrid> 
-                    </p:panel>
+                   
 
-                    <p:panel header="CLIENTE" rendered="#{ventaControlador.banderaPanelRucVisible}" >
+                    <p:panel header="PROVEEDOR"  >
                         <p:panelGrid  columns="2" layout="grid">
                             <p:panelGrid styleClass="sinEspacios">
                                 <p:row>
@@ -100,7 +47,7 @@
                                         <p:outputLabel value="Razón Social:"></p:outputLabel>
                                     </p:column> 
                                     <p:column>
-                                        <p:outputLabel value="#{ventaControlador.usuario.razonsUsuario}"></p:outputLabel>
+                                        <p:outputLabel value="#{compraControlador.usuario.razonsUsuario}"></p:outputLabel>
                                     </p:column> 
                                 </p:row>
                             </p:panelGrid>
@@ -110,7 +57,7 @@
                                         <p:outputLabel value="Dirección:"></p:outputLabel>
                                     </p:column> 
                                     <p:column >
-                                        <p:outputLabel value="#{ventaControlador.usuario.direccionRsUsuario}"></p:outputLabel>
+                                        <p:outputLabel value="#{compraControlador.usuario.direccionRsUsuario}"></p:outputLabel>
                                     </p:column> 
                                 </p:row>
                             </p:panelGrid>
@@ -120,7 +67,7 @@
                                         <p:outputLabel value="Correo Electrónico:"></p:outputLabel>
                                     </p:column> 
                                     <p:column >
-                                        <p:outputLabel value="#{ventaControlador.usuario.mailRsUsuario}"></p:outputLabel>
+                                        <p:outputLabel value="#{compraControlador.usuario.mailRsUsuario}"></p:outputLabel>
                                     </p:column> 
                                 </p:row>
                             </p:panelGrid>
@@ -130,13 +77,13 @@
                                         <p:outputLabel value="Teléfono:"></p:outputLabel>
                                     </p:column> 
                                     <p:column>
-                                        <p:outputLabel value="#{ventaControlador.usuario.telefonoUsuario}"></p:outputLabel>
+                                        <p:outputLabel value="#{compraControlador.usuario.telefonoUsuario}"></p:outputLabel>
                                     </p:column> 
                                 </p:row>
                             </p:panelGrid>
                         </p:panelGrid> 
                     </p:panel>
-                    <p:panel header="DETALLE DE VENTA" rendered="#{ventaControlador.botonActualizarVisible}">
+                    <p:panel header="DETALLE DE COMPRA" rendered="#{compraControlador.botonActualizarVisible}">
                         <p:panelGrid columns="1" layout="grid">
                             <p:panelGrid id="pgAgregaProductos">
                                 <f:facet name="header">
@@ -149,35 +96,35 @@
                                 </f:facet>
                                 <p:row>
                                     <p:column>
-                                        <p:selectOneMenu id="soCategoria"  value="#{ventaControlador.categoria}" styleClass="ocuparMaximo"
+                                        <p:selectOneMenu id="soCategoria"  value="#{compraControlador.categoria}" styleClass="ocuparMaximo"
                                                          
                                                          effect="fade" filter="true" filterMatchMode="startsWith"
                                                          converter="categoriaConverter">
                                             <f:selectItem itemLabel="--Seleccione una Categoría--" itemValue="" />
-                                            <f:selectItems value="#{ventaControlador.listaCategorias}" var="cat" itemLabel="#{cat.nombr}" itemValue="#{cat}" />
-                                            <p:ajax event="change" listener="#{ventaControlador.listarProductos}" update="soProducto"></p:ajax>
+                                            <f:selectItems value="#{compraControlador.listaCategorias}" var="cat" itemLabel="#{cat.nombr}" itemValue="#{cat}" />
+                                            <p:ajax event="change" listener="#{compraControlador.listarProductos}" update="soProducto"></p:ajax>
                                         </p:selectOneMenu>
                                     </p:column>
                                     <p:column>
-                                        <p:selectOneMenu id="soProducto"  value="#{ventaControlador.idProducto}" styleClass="ocuparMaximo"
+                                        <p:selectOneMenu id="soProducto"  value="#{compraControlador.idProducto}" styleClass="ocuparMaximo"
                                                          effect="fade" filter="true" filterMatchMode="startsWith"
                                                          >
                                             <f:selectItem itemLabel="--Seleccione un Producto--" itemValue="" />
-                                            <f:selectItems value="#{ventaControlador.listaProductos}" var="varPro" itemLabel="#{varPro.description}" itemValue="#{varPro.value}" />
-                                            <p:ajax event="change" listener="#{ventaControlador.obtenerMaximo}" update="spCantidad"></p:ajax>
+                                            <f:selectItems value="#{compraControlador.listaProductos}" var="varPro" itemLabel="#{varPro.description}" itemValue="#{varPro.value}" />
+                                            <p:ajax event="change" listener="#{compraControlador.obtenerMaximo}" update="spCantidad"></p:ajax>
                                         </p:selectOneMenu>
                                     </p:column>
                                     <p:column>
-                                        <p:spinner id="spCantidad" value="#{ventaControlador.cantidad}" min="0"  max="#{ventaControlador.maximoStock}"
+                                        <p:spinner id="spCantidad" value="#{compraControlador.cantidad}" min="0" 
                                                    />
                                     </p:column>
                                     <p:column>
-                                        <p:commandButton icon="ui-icon-plus" process="frmVenta:pgAgregaProductos" update="frmVenta:dtDetalles,frmVenta:pgAgregaProductos,frmVenta:pgTotales"
-                                                         actionListener="#{ventaControlador.agregarDetalle()}"></p:commandButton>
+                                        <p:commandButton icon="ui-icon-plus" process="frmCompra:pgAgregaProductos" update="frmCompra:dtDetalles,frmCompra:pgAgregaProductos,frmCompra:pgTotales"
+                                                         actionListener="#{compraControlador.agregarDetalle()}"></p:commandButton>
                                     </p:column>
                                 </p:row>
                             </p:panelGrid>
-                            <p:dataTable id="dtDetalles" var="pro" value="#{ventaControlador.listaDetalles}"
+                            <p:dataTable id="dtDetalles" var="pro" value="#{compraControlador.listaDetalles}"
                                          rows="10"
                                          paginator="true"
                                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -206,7 +153,7 @@
                                 </p:column>
                                 
                                 <p:column headerText="...">
-                                    <p:commandButton icon="ui-icon-close" actionListener="#{ventaControlador.eliminarProducto(pro)}" process="@this" update="frmVenta:dtDetalles"></p:commandButton>
+                                    <p:commandButton icon="ui-icon-close" actionListener="#{compraControlador.eliminarProducto(pro)}" process="@this" update="frmCompra:dtDetalles"></p:commandButton>
                                 </p:column>
 
 <!--                                <p:column headerText="..." styleClass="centrar" style="width: 60px">
@@ -232,7 +179,7 @@
                                         <p:outputLabel styleClass="alineadoDer">SUBTOTAL</p:outputLabel>
                                     </p:column>
                                     <p:column >
-                                        <p:outputLabel styleClass="alineadoDer" value="#{ventaControlador.subtotal}"></p:outputLabel>
+                                        <p:outputLabel styleClass="alineadoDer" value="#{compraControlador.subtotal}"></p:outputLabel>
                                     </p:column>
                                 </p:row>
                                  <p:row>
@@ -240,7 +187,7 @@
                                         <p:outputLabel styleClass="alineadoDer">IVA</p:outputLabel>
                                     </p:column>
                                     <p:column >
-                                        <p:outputLabel styleClass="alineadoDer" value="#{ventaControlador.iva}"></p:outputLabel>
+                                        <p:outputLabel styleClass="alineadoDer" value="#{compraControlador.iva}"></p:outputLabel>
                                     </p:column>
                                 </p:row>
                                  <p:row>
@@ -248,7 +195,7 @@
                                         <p:outputLabel styleClass="alineadoDer">TOTAL</p:outputLabel>
                                     </p:column >
                                     <p:column >
-                                        <p:outputLabel styleClass="alineadoDer" value="#{ventaControlador.total}"></p:outputLabel>
+                                        <p:outputLabel styleClass="alineadoDer" value="#{compraControlador.total}"></p:outputLabel>
                                     </p:column>
                                 </p:row>
                             </p:panelGrid>
@@ -258,9 +205,9 @@
 
                     <center>
                         <p:commandButton value="Guardar" icon="ui-icon-disk"  
-                                         process="frmVenta" update="frmVenta" 
-                                         actionListener="#{ventaControlador.guardarVenta}"></p:commandButton>
-                        <p:commandButton value="Limpiar" icon="ui-icon-refresh"  process="@this" update="frmVenta" actionListener="#{ventaControlador.limpiarVenta}"></p:commandButton>
+                                         process="frmCompra" update="frmCompra" 
+                                         actionListener="#{compraControlador.guardarCompra}"></p:commandButton>
+                                         <p:commandButton value="Limpiar" icon="ui-icon-refresh"  process="@this" update="frmCompra" actionListener="#{compraControlador.limpiarCompra}"></p:commandButton>
                     </center>
 
                 </h:form>

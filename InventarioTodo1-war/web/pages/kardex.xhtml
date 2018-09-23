@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/template/plantilla.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="contenido" >
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <p:messages id="messages" showDetail="true" closable="true">
+                    <p:autoUpdate />
+                </p:messages>
+                <h:form id="frmKardex">
+                    <p:panel header="KARDEX" >
+                        <p:panelGrid id="pgCliente" columns="2" layout="grid"> 
+
+                            <p:outputLabel>Categoria:<span class="rojo"> *</span></p:outputLabel>
+                            <p:selectOneMenu id="soCategoria"  value="#{kardexControlador.categoria}" styleClass="ocuparMaximo"
+                                             effect="fade" filter="true" filterMatchMode="startsWith"
+                                             converter="categoriaConverter">
+                                <f:selectItem itemLabel="--Seleccione una Categoría--" itemValue="" />
+                                <f:selectItems value="#{kardexControlador.listaCategorias}" var="cat" itemLabel="#{cat.nombr}" itemValue="#{cat}" />
+                                <p:ajax event="change" listener="#{kardexControlador.listarProductos}" update="soProducto"></p:ajax>
+                            </p:selectOneMenu>
+
+
+                            <p:outputLabel>Producto:<span class="rojo"> *</span></p:outputLabel>
+                            <p:selectOneMenu id="soProducto"  value="#{kardexControlador.idProducto}" styleClass="ocuparMaximo"
+                                             effect="fade" filter="true" filterMatchMode="startsWith"
+                                             >
+                                <f:selectItem itemLabel="--Seleccione un Producto--" itemValue="" />
+                                <f:selectItems value="#{kardexControlador.listaProductos}" var="varPro" itemLabel="#{varPro.description}" itemValue="#{varPro.value}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel>Desde:</p:outputLabel>
+                            <p:calendar id="cdDesde" value="#{kardexControlador.desde}" maxdate="today">
+                                <p:ajax event="dateSelect"  update="cdHasta" />
+                            </p:calendar>
+
+                            <p:outputLabel > Hasta:</p:outputLabel>
+                            <p:calendar id="cdHasta" value="#{kardexControlador.hasta}" mindate="#{kardexControlador.desde}" maxdate="today">
+                                <p:ajax event="dateSelect"  update="cdDesde" />
+                            </p:calendar>
+
+                        </p:panelGrid>
+                        <center>
+                            <p:commandButton value="Procesar" icon="ui-icon-disk"  
+                                             process="frmKardex" update="frmKardex:dtKardex" 
+                                             actionListener="#{kardexControlador.procesarKardex}"></p:commandButton>
+                            <p:commandButton value="Limpiar" icon="ui-icon-refresh"  process="@this" update="frmKardex" actionListener="#{kardexControlador.limpiarKardex}"></p:commandButton>
+                        </center>
+                    </p:panel>
+
+
+
+
+                    <p:panel header="DETALLE DE KARDEX - Distribución Porcentual" >
+                        <p:dataTable id="dtKardex" var="kar" value="#{kardexControlador.listaKardex}"
+                                     emptyMessage="No existen datos para mostrar">
+                            <f:facet name="header">
+                                Kardex de #{kardexControlador.producto.nombreProducto}
+                            </f:facet>
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column colspan="2" headerText="Concepto"></p:column>
+                                    <p:column colspan="3" headerText="Entradas"></p:column>
+                                    <p:column colspan="3" headerText="Salidas"></p:column>
+                                    <p:column colspan="3" headerText="Existencia"></p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column headerText="Fecha"></p:column>
+                                    <p:column headerText="Detalle"></p:column>
+                                    <p:column headerText="Cantidad"></p:column>
+                                    <p:column headerText="Valor U."></p:column>
+                                    <p:column headerText="Total"></p:column>
+                                    <p:column headerText="Cantidad"></p:column>
+                                    <p:column headerText="Valor U."></p:column>
+                                    <p:column headerText="Total"></p:column>
+                                     <p:column headerText="Cantidad"></p:column>
+                                    <p:column headerText="Valor U."></p:column>
+                                    <p:column headerText="Total"></p:column>
+                                </p:row>
+                            </p:columnGroup>
+                            <p:column>
+                                <h:outputText value="#{kar.fecha_transaccion}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{kar.detalle}" />
+                            </p:column>
+
+
+                            <p:column >
+                                <h:outputText value="#{kar.cantidadEntrada}" />
+                            </p:column>
+
+                            <p:column >
+                                <h:outputText value="#{kar.valorUnitarioEntrada}" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{kar.valorTotalEntrada}" />
+                            </p:column>
+
+                            <p:column >
+                                <h:outputText value="#{kar.cantidadSalida}" />
+                            </p:column>
+
+                            <p:column >
+                                <h:outputText value="#{kar.valorUnitarioSalida}" />
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="#{kar.valorTotalSalida}" />
+                            </p:column>
+
+                            <p:column >
+                                <h:outputText value="#{kar.cantidadExistencia}" />
+                            </p:column>
+
+                            <p:column >
+                                <h:outputText value="#{kar.valorUnitarioExistencia}" />
+                            </p:column>
+                            <p:column >
+                                <h:outputText value="#{kar.valorTotalExistencia}" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:panel>
+
+
+
+
+                </h:form>
+            </div>           
+        </div>
+    </ui:define>    
+</ui:composition>
