@@ -26,4 +26,9 @@ public class TransaccionServicio {
         return transaccionDao.find(idTransaccion);
     }
     
+    public Transaccion guardarTransaccion(Transaccion transaccion){
+         return transaccionDao.editEntity(transaccion);
+    }
+    
+    
 }

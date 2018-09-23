@@ -6,6 +6,7 @@
 package todo1.inventario.modelo;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,17 +14,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Cristian
+ * @author Xacrys10
  */
 @Entity
 @Table(name = "operacion", schema = "todo1")
@@ -46,9 +47,8 @@ public class Operacion implements Serializable {
     private String descripcionOperacion;
     @Column(name = "estado_operacion")
     private Boolean estadoOperacion;
-    @JoinColumn(name = "id_transaccion", referencedColumnName = "id_transaccion")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Transaccion idTransaccion;
+    @OneToMany(mappedBy = "idOperacion", fetch = FetchType.LAZY)
+    private List<Transaccion> transaccionList;
 
     public Operacion() {
     }
@@ -81,12 +81,13 @@ public class Operacion implements Serializable {
         this.estadoOperacion = estadoOperacion;
     }
 
-    public Transaccion getIdTransaccion() {
-        return idTransaccion;
+    @XmlTransient
+    public List<Transaccion> getTransaccionList() {
+        return transaccionList;
     }
 
-    public void setIdTransaccion(Transaccion idTransaccion) {
-        this.idTransaccion = idTransaccion;
+    public void setTransaccionList(List<Transaccion> transaccionList) {
+        this.transaccionList = transaccionList;
     }
 
     @Override

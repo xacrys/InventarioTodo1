@@ -5,8 +5,11 @@
  */
 package todo1.inventario.servicio;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import todo1.inventario.dao.VendedorDao;
+import todo1.inventario.modelo.Vendedor;
 
 /**
  *
@@ -15,4 +18,11 @@ import javax.ejb.Stateless;
 @LocalBean
 @Stateless
 public class VendedorServicio {
+
+    @EJB
+    private VendedorDao vendedorDao;
+
+    public Vendedor obtenerVendedorPorCedula(String cedula) {
+        return vendedorDao.obtenerVendedorPorCedulaDao(cedula);
+    }
 }

@@ -5,8 +5,11 @@
  */
 package todo1.inventario.servicio;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import todo1.inventario.dao.DetalleTransaccionDao;
+import todo1.inventario.modelo.DetalleTransaccion;
 
 /**
  *
@@ -14,8 +17,13 @@ import javax.ejb.Stateless;
  */
 @LocalBean
 @Stateless
-public class DetalleTransaccionServicio  {
+public class DetalleTransaccionServicio {
 
-   
-    
+    @EJB
+    private DetalleTransaccionDao detalleTransaccionDao;
+
+    public DetalleTransaccion guardarDetalleTransaccion(DetalleTransaccion detalleTransaccion) {
+        return detalleTransaccionDao.editEntity(detalleTransaccion);
+    }
+
 }

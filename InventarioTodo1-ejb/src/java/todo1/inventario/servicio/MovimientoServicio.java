@@ -5,8 +5,13 @@
  */
 package todo1.inventario.servicio;
 
+import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import todo1.inventario.dao.MovimientoDao;
+import todo1.inventario.dto.DetalleKardexDto;
+import todo1.inventario.modelo.Movimiento;
 
 /**
  *
@@ -17,6 +22,15 @@ import javax.ejb.Stateless;
 public class MovimientoServicio {
 
 
+ @EJB
+ private MovimientoDao movimientoDao;
  
+ public Movimiento guardarMovimiento(Movimiento movimiento){
+     return movimientoDao.editEntity(movimiento);
+ }
+ 
+ public List<DetalleKardexDto> obtenerListaMovimientosKardex(Integer idProducto){
+     return movimientoDao.obtenerListaMovimientosKardexDao(idProducto);
+ }
     
 }

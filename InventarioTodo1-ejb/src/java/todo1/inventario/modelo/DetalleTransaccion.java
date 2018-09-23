@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Cristian
+ * @author Xacrys10
  */
 @Entity
 @Table(name = "detalle_transaccion", schema = "todo1")
@@ -47,9 +47,9 @@ public class DetalleTransaccion implements Serializable {
     private Integer idDetalleTransaccion;
     @Column(name = "cantidad_detalle_transaccion")
     private Integer cantidadDetalleTransaccion;
-    @Column(name = "preciou_detalle_transaccion")
-    private Long preciouDetalleTransaccion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "preciou_detalle_transaccion")
+    private BigDecimal preciouDetalleTransaccion;
     @Column(name = "monto_detalle_transaccion")
     private BigDecimal montoDetalleTransaccion;
     @OneToMany(mappedBy = "idDetalleTransaccion", fetch = FetchType.LAZY)
@@ -84,11 +84,11 @@ public class DetalleTransaccion implements Serializable {
         this.cantidadDetalleTransaccion = cantidadDetalleTransaccion;
     }
 
-    public Long getPreciouDetalleTransaccion() {
+    public BigDecimal getPreciouDetalleTransaccion() {
         return preciouDetalleTransaccion;
     }
 
-    public void setPreciouDetalleTransaccion(Long preciouDetalleTransaccion) {
+    public void setPreciouDetalleTransaccion(BigDecimal preciouDetalleTransaccion) {
         this.preciouDetalleTransaccion = preciouDetalleTransaccion;
     }
 

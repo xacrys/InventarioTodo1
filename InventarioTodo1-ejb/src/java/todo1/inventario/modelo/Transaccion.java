@@ -6,6 +6,7 @@
 package todo1.inventario.modelo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -28,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Cristian
+ * @author Xacrys10
  */
 @Entity
 @Table(name = "transaccion", schema = "todo1")
@@ -36,7 +37,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Transaccion.findAll", query = "SELECT t FROM Transaccion t")
     , @NamedQuery(name = "Transaccion.findByIdTransaccion", query = "SELECT t FROM Transaccion t WHERE t.idTransaccion = :idTransaccion")
-    , @NamedQuery(name = "Transaccion.findByFechaTransaccion", query = "SELECT t FROM Transaccion t WHERE t.fechaTransaccion = :fechaTransaccion")})
+    , @NamedQuery(name = "Transaccion.findByFechaTransaccion", query = "SELECT t FROM Transaccion t WHERE t.fechaTransaccion = :fechaTransaccion")
+    , @NamedQuery(name = "Transaccion.findBySubtotal", query = "SELECT t FROM Transaccion t WHERE t.subtotal = :subtotal")
+    , @NamedQuery(name = "Transaccion.findByImpuesto", query = "SELECT t FROM Transaccion t WHERE t.impuesto = :impuesto")
+    , @NamedQuery(name = "Transaccion.findByTotal", query = "SELECT t FROM Transaccion t WHERE t.total = :total")})
 public class Transaccion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -48,16 +52,24 @@ public class Transaccion implements Serializable {
     @Column(name = "fecha_transaccion")
     @Temporal(TemporalType.DATE)
     private Date fechaTransaccion;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "subtotal")
+    private BigDecimal subtotal;
+    @Column(name = "impuesto")
+    private BigDecimal impuesto;
+    @Column(name = "total")
+    private BigDecimal total;
     @OneToMany(mappedBy = "idTransaccion", fetch = FetchType.LAZY)
     private List<DetalleTransaccion> detalleTransaccionList;
+    @JoinColumn(name = "id_operacion", referencedColumnName = "id_operacion")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Operacion idOperacion;
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario idUsuario;
     @JoinColumn(name = "id_vendedor", referencedColumnName = "id_vendedor")
     @ManyToOne(fetch = FetchType.LAZY)
     private Vendedor idVendedor;
-    @OneToMany(mappedBy = "idTransaccion", fetch = FetchType.LAZY)
-    private List<Operacion> operacionList;
 
     public Transaccion() {
     }
@@ -82,6 +94,30 @@ public class Transaccion implements Serializable {
         this.fechaTransaccion = fechaTransaccion;
     }
 
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public BigDecimal getImpuesto() {
+        return impuesto;
+    }
+
+    public void setImpuesto(BigDecimal impuesto) {
+        this.impuesto = impuesto;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
     @XmlTransient
     public List<DetalleTransaccion> getDetalleTransaccionList() {
         return detalleTransaccionList;
@@ -89,6 +125,14 @@ public class Transaccion implements Serializable {
 
     public void setDetalleTransaccionList(List<DetalleTransaccion> detalleTransaccionList) {
         this.detalleTransaccionList = detalleTransaccionList;
+    }
+
+    public Operacion getIdOperacion() {
+        return idOperacion;
+    }
+
+    public void setIdOperacion(Operacion idOperacion) {
+        this.idOperacion = idOperacion;
     }
 
     public Usuario getIdUsuario() {
@@ -105,15 +149,6 @@ public class Transaccion implements Serializable {
 
     public void setIdVendedor(Vendedor idVendedor) {
         this.idVendedor = idVendedor;
-    }
-
-    @XmlTransient
-    public List<Operacion> getOperacionList() {
-        return operacionList;
-    }
-
-    public void setOperacionList(List<Operacion> operacionList) {
-        this.operacionList = operacionList;
     }
 
     @Override
